@@ -18,4 +18,6 @@ type Input struct {
 	MiddleMouseButton bool
 }
 
-func (i Input) GetComponentName() string { return inputComponentName }
+func (i Input) GetComponentName() string { return GetInputComponentName() }
+
+func GetInputComponentName() string {return inputComponentName }

@@ -7,4 +7,6 @@ type Velocity struct {
 	Y int
 }
 
-func (v Velocity) GetComponentName() string { return velocityComponentName}
+func (v Velocity) GetComponentName() string { return GetVelocityComponentName() }
+
+func GetVelocityComponentName() string {return velocityComponentName }

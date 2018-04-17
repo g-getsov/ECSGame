@@ -6,4 +6,6 @@ type Speed struct {
 	Speed int
 }
 
-func (s Speed) GetComponentName() string { return speedComponentName }
+func (s Speed) GetComponentName() string { return GetSpeedComponentName() }
+
+func GetSpeedComponentName() string {return speedComponentName }

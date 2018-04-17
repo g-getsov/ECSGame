@@ -1,10 +1,11 @@
-package main
+package entities
 
 import (
 	"testing"
 	"github.com/stretchr/testify/assert"
 	"math"
 	"BasicECS/components"
+	"BasicECS/utils"
 )
 
 func TestNewIdGeneration(t *testing.T) {
@@ -38,9 +39,9 @@ func TestCreateEntities(t *testing.T) {
 	secondEntity := entityManager.CreateEntity()
 
 	assert.Equal(t, 1, entity.Id)
-	assert.True(t, containsEntity(entityManager.entities, entity))
+	assert.True(t, utils.ContainsEntity(entityManager.entities, entity))
 	assert.NotNil(t, 2, secondEntity.Id)
-	assert.True(t, containsEntity(entityManager.entities, secondEntity))
+	assert.True(t, utils.ContainsEntity(entityManager.entities, secondEntity))
 }
 
 func TestCreateEntitiesFullCapacity(t *testing.T) {
@@ -52,9 +53,9 @@ func TestCreateEntitiesFullCapacity(t *testing.T) {
 	secondEntity := entityManager.CreateEntity()
 
 	assert.Equal(t, math.MaxInt32, entity.Id)
-	assert.True(t, containsEntity(entityManager.entities, entity))
+	assert.True(t, utils.ContainsEntity(entityManager.entities, entity))
 	assert.NotNil(t, 0, secondEntity.Id)
-	assert.True(t, containsEntity(entityManager.entities, secondEntity))
+	assert.True(t, utils.ContainsEntity(entityManager.entities, secondEntity))
 }
 
 func TestAddComponentToEntity(t *testing.T) {
@@ -139,7 +140,7 @@ func TestRemoveEntity(t *testing.T) {
 	speedComponent = entityManager.GetComponentOfClass(speedComponentName, entity.Id)
 	assert.Nil(t, speedComponent)
 
-	assert.False(t, containsEntity(entityManager.entities, entity))
+	assert.False(t, utils.ContainsEntity(entityManager.entities, entity))
 
 	speedComponent = entityManager.GetComponentOfClass(speedComponentName, secondEntity.Id)
 	assert.NotNil(t, speedComponent)

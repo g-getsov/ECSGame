@@ -1,16 +1,16 @@
-package main
+package entities
 
 import (
 	"math"
 	"fmt"
 	cmpt "BasicECS/components"
-	"BasicECS/entities"
+	"BasicECS/utils"
 )
 
 type EntityManager struct {
 	lowestUnassignedEntityId int
-	entities []entities.Entity
-	componentsByClass map[string]map[int]cmpt.Component
+	entities []Entity
+	componentsByClass map[string]map[int]*cmpt.Component
 }
 
 func (e *EntityManager) generateNewEntityId() int {
@@ -20,7 +20,7 @@ func (e *EntityManager) generateNewEntityId() int {
 	}
 
 	for i := 0; i < math.MaxInt32; i++ {
-		if containsEntityById(e.entities, i) {
+		if utils.ContainsEntityById(e.entities, i) {
 			return i
 		}
 	}
@@ -29,9 +29,9 @@ func (e *EntityManager) generateNewEntityId() int {
 	return 0
 }
 
-func (e *EntityManager) CreateEntity() entities.Entity {
+func (e *EntityManager) CreateEntity() Entity {
 	id := e.generateNewEntityId()
-	entity := entities.CreateNewEntity(id)
+	entity := CreateNewEntity(id)
 	e.entities = append(e.entities, entity)
 	return entity
 }
@@ -42,7 +42,7 @@ func (e *EntityManager) RemoveEntity(entityId int) {
 			delete(component, entityId)
 		}
 	}
-	e.entities = removeEntityById(e.entities, entityId)
+	e.entities = utils.RemoveEntityById(e.entities, entityId)
 }
 
 func (e *EntityManager) AddComponentToEntity(entityId int, component cmpt.Component) {
@@ -51,16 +51,16 @@ func (e *EntityManager) AddComponentToEntity(entityId int, component cmpt.Compon
 	componentsForClass := e.componentsByClass[componentName]
 
 	if componentsForClass == nil {
-		componentsForClass := make(map[int]cmpt.Component)
-		componentsForClass[entityId] = component
+		componentsForClass := make(map[int]*cmpt.Component)
+		componentsForClass[entityId] = &component
 		e.componentsByClass[componentName] = componentsForClass
 		return
 	}
 
-	componentsForClass[entityId] = component
+	componentsForClass[entityId] = &component
 }
 
-func (e *EntityManager) GetComponentOfClass(componentName string, entityId int) cmpt.Component {
+func (e *EntityManager) GetComponentOfClass(componentName string, entityId int) *cmpt.Component {
 	componentsForClass := e.componentsByClass[componentName]
 	if componentsForClass == nil { return nil }
 	return componentsForClass[entityId]
@@ -69,19 +69,19 @@ func (e *EntityManager) GetAllEntitiesPossessingComponentsOfClass(componentName 
 	componentsForClass := e.componentsByClass[componentName]
 	if componentsForClass == nil { return make([]int, 0)}
 
-	entitiesPosssessingComponent := make([]int, len(componentsForClass))
+	entitiesPossessingComponent := make([]int, len(componentsForClass))
 	i := 0
 	for key := range componentsForClass {
-		entitiesPosssessingComponent[i] = key
+		entitiesPossessingComponent[i] = key
 		i++
 	}
-	return entitiesPosssessingComponent
+	return entitiesPossessingComponent
 }
 
 func CreateEntityManager() EntityManager {
 	return EntityManager {
 		lowestUnassignedEntityId: 0,
-		entities: make([]entities.Entity, 0),
-		componentsByClass: make(map[string]map[int]cmpt.Component),
+		entities: make([]Entity, 0),
+		componentsByClass: make(map[string]map[int]*cmpt.Component),
 	}
 }
