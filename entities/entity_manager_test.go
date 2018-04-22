@@ -5,7 +5,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"math"
 	"BasicECS/components"
-	"BasicECS/utils"
 )
 
 func TestNewIdGeneration(t *testing.T) {
@@ -39,9 +38,9 @@ func TestCreateEntities(t *testing.T) {
 	secondEntity := entityManager.CreateEntity()
 
 	assert.Equal(t, 1, entity.Id)
-	assert.True(t, utils.ContainsEntity(entityManager.entities, entity))
+	assert.True(t, ContainsEntity(entityManager.entities, entity))
 	assert.NotNil(t, 2, secondEntity.Id)
-	assert.True(t, utils.ContainsEntity(entityManager.entities, secondEntity))
+	assert.True(t, ContainsEntity(entityManager.entities, secondEntity))
 }
 
 func TestCreateEntitiesFullCapacity(t *testing.T) {
@@ -53,9 +52,9 @@ func TestCreateEntitiesFullCapacity(t *testing.T) {
 	secondEntity := entityManager.CreateEntity()
 
 	assert.Equal(t, math.MaxInt32, entity.Id)
-	assert.True(t, utils.ContainsEntity(entityManager.entities, entity))
+	assert.True(t, ContainsEntity(entityManager.entities, entity))
 	assert.NotNil(t, 0, secondEntity.Id)
-	assert.True(t, utils.ContainsEntity(entityManager.entities, secondEntity))
+	assert.True(t, ContainsEntity(entityManager.entities, secondEntity))
 }
 
 func TestAddComponentToEntity(t *testing.T) {
@@ -88,6 +87,36 @@ func TestAddComponentToEntity(t *testing.T) {
 	assert.Nil(t, entityManager.componentsByClass["invalidcomponent"])
 }
 
+func TestAddComponentsToEntity(t *testing.T)  {
+
+	entityManager := CreateEntityManager()
+
+	entity := entityManager.CreateEntity()
+	secondEntity := entityManager.CreateEntity()
+
+	speedComponent := components.CreateSpeedComponent(32)
+	healthComponent := components.CreateHealthComponent(10)
+
+	healthComponentName := healthComponent.GetComponentName()
+	speedComponentName := speedComponent.GetComponentName()
+
+	assert.Nil(t, entityManager.componentsByClass[speedComponentName])
+	assert.Nil(t, entityManager.componentsByClass[healthComponentName])
+
+	entityManager.AddComponentsToEntity(entity.Id, []components.Component{speedComponent, healthComponent})
+	entityManager.AddComponentsToEntity(secondEntity.Id, []components.Component{healthComponent})
+
+	assert.NotNil(t, entityManager.componentsByClass[speedComponentName])
+	assert.NotNil(t, entityManager.componentsByClass[healthComponentName])
+
+	assert.NotNil(t, entityManager.componentsByClass[healthComponentName][entity.Id])
+	assert.NotNil(t, entityManager.componentsByClass[speedComponentName][entity.Id])
+
+	assert.NotNil(t, entityManager.componentsByClass[healthComponentName][secondEntity.Id])
+
+	assert.Nil(t, entityManager.componentsByClass["invalidcomponent"])
+}
+
 func TestGetComponentOfClass(t *testing.T) {
 
 	entityManager := CreateEntityManager()
@@ -107,12 +136,14 @@ func TestGetComponentOfClass(t *testing.T) {
 	entityManager.AddComponentToEntity(entity.Id, speedComponent)
 	entityManager.AddComponentToEntity(secondEntity.Id, healthComponent)
 
-	speedComponent = entityManager.GetComponentOfClass(speedComponentName, entity.Id)
-	healthComponent = entityManager.GetComponentOfClass(healthComponentName, secondEntity.Id)
+	storedSpeedComponent := entityManager.GetComponentOfClass(speedComponentName, entity.Id)
+	storedHealthComponent := entityManager.GetComponentOfClass(healthComponentName, secondEntity.Id)
 	noComponent := entityManager.GetComponentOfClass(healthComponentName, entity.Id)
 
-	assert.NotNil(t, speedComponent)
-	assert.NotNil(t, healthComponent)
+	assert.NotNil(t, storedSpeedComponent)
+	assert.NotNil(t, storedHealthComponent)
+	assert.Equal(t, healthComponent, storedHealthComponent)
+	assert.Equal(t, speedComponent, storedSpeedComponent)
 	assert.Nil(t, noComponent)
 }
 
@@ -137,13 +168,13 @@ func TestRemoveEntity(t *testing.T) {
 
 	entityManager.RemoveEntity(entity.Id)
 
-	speedComponent = entityManager.GetComponentOfClass(speedComponentName, entity.Id)
-	assert.Nil(t, speedComponent)
+	returnedSpeedComponent := entityManager.GetComponentOfClass(speedComponentName, entity.Id)
+	assert.Nil(t, returnedSpeedComponent)
 
-	assert.False(t, utils.ContainsEntity(entityManager.entities, entity))
+	assert.False(t, ContainsEntity(entityManager.entities, entity))
 
-	speedComponent = entityManager.GetComponentOfClass(speedComponentName, secondEntity.Id)
-	assert.NotNil(t, speedComponent)
+	secondReturnedSpeedComponent := entityManager.GetComponentOfClass(speedComponentName, secondEntity.Id)
+	assert.NotNil(t, secondReturnedSpeedComponent)
 }
 
 func TestGetAllEntitiesPossessingComponentsOfClass(t *testing.T) {

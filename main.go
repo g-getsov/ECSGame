@@ -1,26 +1,21 @@
 package main
 
 import (
-	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"BasicECS/world"
 	"BasicECS/entities"
 	"BasicECS/systems"
+	"BasicECS/resources"
 )
-
-func update(screen *ebiten.Image) error {
-	ebitenutil.DebugPrint(screen, "Hello world!")
-	return nil
-}
 
 func prepareWorld() world.World {
 	entityManager := entities.CreateEntityManager()
 	systemManager := systems.CreateSystemManager()
-	return world.CreateWorld(&entityManager, &systemManager)
+	imageManager := resources.CreateImageManager()
+	entityFactory := entities.CreateEntityFactory(&imageManager)
+	return world.CreateWorld(&entityManager, &entityFactory, &systemManager)
 }
 
 func main() {
-/*	newWorld := prepareWorld()
-	newWorld.Run()*/
-	ebiten.Run(update, 320, 240, 2, "Hello world!")
+	newWorld := prepareWorld()
+	newWorld.Run()
 }

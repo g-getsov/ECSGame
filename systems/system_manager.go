@@ -6,13 +6,13 @@ type SystemManager struct {
 	systems []System
 }
 
-func (sm *SystemManager) AddSystem(system *System) {
+func (sm *SystemManager) AddSystem(system System) {
 	if system == nil { return }
 	sm.systems = append(sm.systems, system)
 	sm.sortSystems()
 }
 
-func (sm SystemManager) ProcessSystems(dt float32, entityManager *entities.EntityManager) {
+func (sm SystemManager) ProcessSystems(dt float64, entityManager *entities.EntityManager) {
 	for _, system := range sm.systems {
 		system.Update(dt, entityManager)
 	}

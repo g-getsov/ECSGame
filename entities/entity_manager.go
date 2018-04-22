@@ -4,13 +4,12 @@ import (
 	"math"
 	"fmt"
 	cmpt "BasicECS/components"
-	"BasicECS/utils"
 )
 
 type EntityManager struct {
 	lowestUnassignedEntityId int
 	entities []Entity
-	componentsByClass map[string]map[int]*cmpt.Component
+	componentsByClass map[string]map[int]cmpt.Component
 }
 
 func (e *EntityManager) generateNewEntityId() int {
@@ -20,7 +19,7 @@ func (e *EntityManager) generateNewEntityId() int {
 	}
 
 	for i := 0; i < math.MaxInt32; i++ {
-		if utils.ContainsEntityById(e.entities, i) {
+		if ContainsEntityById(e.entities, i) {
 			return i
 		}
 	}
@@ -42,25 +41,33 @@ func (e *EntityManager) RemoveEntity(entityId int) {
 			delete(component, entityId)
 		}
 	}
-	e.entities = utils.RemoveEntityById(e.entities, entityId)
+	e.entities = RemoveEntityById(e.entities, entityId)
 }
 
 func (e *EntityManager) AddComponentToEntity(entityId int, component cmpt.Component) {
-	componentName := component.GetComponentName()
-
-	componentsForClass := e.componentsByClass[componentName]
-
-	if componentsForClass == nil {
-		componentsForClass := make(map[int]*cmpt.Component)
-		componentsForClass[entityId] = &component
-		e.componentsByClass[componentName] = componentsForClass
-		return
-	}
-
-	componentsForClass[entityId] = &component
+	e.AddComponentsToEntity(entityId, []cmpt.Component{component})
 }
 
-func (e *EntityManager) GetComponentOfClass(componentName string, entityId int) *cmpt.Component {
+func (e *EntityManager) AddComponentsToEntity(entityId int, components []cmpt.Component) {
+
+	for _, component := range components {
+
+		componentName := component.GetComponentName()
+
+		componentsForClass := e.componentsByClass[componentName]
+
+		if componentsForClass == nil {
+			componentsForClass := make(map[int]cmpt.Component)
+			componentsForClass[entityId] = component
+			e.componentsByClass[componentName] = componentsForClass
+			continue
+		}
+
+		componentsForClass[entityId] = component
+	}
+}
+
+func (e *EntityManager) GetComponentOfClass(componentName string, entityId int) cmpt.Component {
 	componentsForClass := e.componentsByClass[componentName]
 	if componentsForClass == nil { return nil }
 	return componentsForClass[entityId]
@@ -82,6 +89,6 @@ func CreateEntityManager() EntityManager {
 	return EntityManager {
 		lowestUnassignedEntityId: 0,
 		entities: make([]Entity, 0),
-		componentsByClass: make(map[string]map[int]*cmpt.Component),
+		componentsByClass: make(map[string]map[int]cmpt.Component),
 	}
 }
