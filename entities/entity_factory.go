@@ -15,14 +15,14 @@ func CreateEntityFactory(imageManager *rsc.ImageManager) EntityFactory {
 	}
 }
 
-func (e *EntityFactory) CreatePlayer(entityManager *EntityManager) {
+func (e *EntityFactory) CreatePlayer(entityManager *EntityManager, x int, y int, speed int, health int) {
 	entity := entityManager.CreateEntity()
 
 	image := e.imageManager.GetImageOrLoad("player.png")
 
-	positionComponent := cmpt.CreatePositionComponent(200,200)
-	speedComponent := cmpt.CreateSpeedComponent(2)
-	healthComponent := cmpt.CreateHealthComponent(100)
+	positionComponent := cmpt.CreatePositionComponent(x,y)
+	speedComponent := cmpt.CreateSpeedComponent(speed)
+	healthComponent := cmpt.CreateHealthComponent(health)
 	inputComponent := cmpt.CreateInputComponent()
 	spriteComponent := cmpt.CreateSpriteComponent(image)
 	movableComponent := cmpt.CreateMovableComponent()
@@ -40,13 +40,19 @@ func (e *EntityFactory) CreatePlayer(entityManager *EntityManager) {
 func (e *EntityFactory) CreateZombie(entityManager *EntityManager) {
 	entity := entityManager.CreateEntity()
 
-	positionComponent := cmpt.CreatePositionComponent(250,250)
+	image := e.imageManager.GetImageOrLoad("wolf.png")
+
+	positionComponent := cmpt.CreatePositionComponent(50,50)
 	speedComponent := cmpt.CreateSpeedComponent(1)
 	healthComponent := cmpt.CreateHealthComponent(20)
+	spriteComponent := cmpt.CreateSpriteComponent(image)
+	movableComponent := cmpt.CreateMovableComponent()
 
 	entityManager.AddComponentsToEntity(entity.Id, []cmpt.Component {
 		&positionComponent,
 		&speedComponent,
 		&healthComponent,
+		&spriteComponent,
+		&movableComponent,
 	})
 }

@@ -18,7 +18,13 @@ type World struct {
 }
 
 func (w *World) initializeWorld(screen *ebiten.Image) {
-	w.entityFactory.CreatePlayer(w.entityManager)
+	w.entityFactory.CreatePlayer(
+		w.entityManager,
+		550,
+		240,
+		2,
+		100)
+
 	w.entityFactory.CreateZombie(w.entityManager)
 	w.systemManager.AddSystem(systems.CreateInputSystem())
 	w.systemManager.AddSystem(systems.CreateMovementSystem())
@@ -43,7 +49,7 @@ func (w *World) update(screen *ebiten.Image) error {
 }
 
 func (w *World) Run() {
-	ebiten.Run(w.update, 320, 240, 2, "Hello world!")
+	ebiten.Run(w.update, 640, 480, 2, "Hello world!")
 }
 
 func CreateWorld(

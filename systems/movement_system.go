@@ -33,12 +33,12 @@ func (s movementSystem) Update(dt float64, entityManager *entities.EntityManager
 
 		inputComponent := entityManager.GetComponentOfClass(
 			components.GetInputComponentName(),
-			entityId).(*components.Input)
+			entityId)
 
 		if inputComponent == nil {
-			aiMovement()
+			aiMovement(positionComponent, speedComponent)
 		} else {
-			controllerMovement(inputComponent, positionComponent, speedComponent)
+			controllerMovement(inputComponent.(*components.Input), positionComponent, speedComponent)
 		}
 	}
 }
@@ -52,8 +52,8 @@ func controllerMovement(input *components.Input, position *components.Position, 
 	}
 }
 
-func aiMovement() {
-
+func aiMovement(position *components.Position, speed *components.Speed) {
+	position.X += speed.Speed
 }
 
 func CreateMovementSystem() System { return movementSystem{} }
