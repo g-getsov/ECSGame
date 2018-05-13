@@ -1,15 +1,14 @@
-package entities
+package core
 
 import (
 	"fmt"
-	cmpt "BasicECS/components"
 	"github.com/satori/go.uuid"
 )
 
 type EntityManager struct {
 	maxNumEntities int
 	entities map[string]Entity
-	componentsByClass map[string]map[string]cmpt.Component
+	componentsByClass map[string]map[string]Component
 }
 
 func (e *EntityManager) generateNewEntityId() string {
@@ -48,11 +47,11 @@ func (e *EntityManager) RemoveEntity(entityId string) {
 	delete(e.entities, entityId)
 }
 
-func (e *EntityManager) AddComponentToEntity(entityId string, component cmpt.Component) {
-	e.AddComponentsToEntity(entityId, []cmpt.Component{component})
+func (e *EntityManager) AddComponentToEntity(entityId string, component Component) {
+	e.AddComponentsToEntity(entityId, []Component{component})
 }
 
-func (e *EntityManager) AddComponentsToEntity(entityId string, components []cmpt.Component) {
+func (e *EntityManager) AddComponentsToEntity(entityId string, components []Component) {
 
 	for _, component := range components {
 
@@ -61,7 +60,7 @@ func (e *EntityManager) AddComponentsToEntity(entityId string, components []cmpt
 		componentsForClass := e.componentsByClass[componentName]
 
 		if componentsForClass == nil {
-			componentsForClass := make(map[string]cmpt.Component)
+			componentsForClass := make(map[string]Component)
 			componentsForClass[entityId] = component
 			e.componentsByClass[componentName] = componentsForClass
 			continue
@@ -71,7 +70,7 @@ func (e *EntityManager) AddComponentsToEntity(entityId string, components []cmpt
 	}
 }
 
-func (e *EntityManager) GetComponentOfClass(componentName string, entityId string) cmpt.Component {
+func (e *EntityManager) GetComponentOfClass(componentName string, entityId string) Component {
 	componentsForClass := e.componentsByClass[componentName]
 	if componentsForClass == nil { return nil }
 	return componentsForClass[entityId]
@@ -93,6 +92,6 @@ func CreateEntityManager(maxNumEntities int) EntityManager {
 	return EntityManager {
 		maxNumEntities: maxNumEntities,
 		entities: make(map[string]Entity),
-		componentsByClass: make(map[string]map[string]cmpt.Component),
+		componentsByClass: make(map[string]map[string]Component),
 	}
 }

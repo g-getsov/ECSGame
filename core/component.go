@@ -1,4 +1,4 @@
-package components
+package core
 
 type Component interface {
 	GetComponentName() string

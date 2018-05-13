@@ -1,8 +1,8 @@
 package closures
 
-import "BasicECS/entities"
+import "BasicECS/core"
 
 type InteractionFunc func(
-	entityManager *entities.EntityManager,
+	entityManager *core.EntityManager,
 	entityId int,
 	interactingEntityId int) bool

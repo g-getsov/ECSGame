@@ -1,6 +1,8 @@
 package systems
 
-import "BasicECS/entities"
+import (
+	"BasicECS/core"
+)
 
 type SystemManager struct {
 	systems []System
@@ -12,7 +14,7 @@ func (sm *SystemManager) AddSystem(system System) {
 	sm.sortSystems()
 }
 
-func (sm SystemManager) ProcessSystems(dt float64, entityManager *entities.EntityManager) {
+func (sm SystemManager) ProcessSystems(dt float64, entityManager *core.EntityManager) {
 	for _, system := range sm.systems {
 		system.Update(dt, entityManager)
 	}

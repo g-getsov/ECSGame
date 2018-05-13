@@ -1,10 +1,12 @@
-package entities
+package utils
 
-func RemoveEntity(entitySlice []Entity, entity Entity) []Entity {
+import "BasicECS/core"
+
+func RemoveEntity(entitySlice []core.Entity, entity core.Entity) []core.Entity {
 	return RemoveEntityById(entitySlice, entity.Id)
 }
 
-func RemoveEntityById(entitySlice []Entity, entityId string) []Entity {
+func RemoveEntityById(entitySlice []core.Entity, entityId string) []core.Entity {
 	for idx, value := range entitySlice {
 		if value.Id == entityId {
 			entitySlice = append(entitySlice[:idx], entitySlice[idx+1:]...)
@@ -14,11 +16,11 @@ func RemoveEntityById(entitySlice []Entity, entityId string) []Entity {
 	return entitySlice
 }
 
-func ContainsEntity(entitySlice []Entity, entity Entity) bool {
+func ContainsEntity(entitySlice []core.Entity, entity core.Entity) bool {
 	return ContainsEntityById(entitySlice, entity.Id)
 }
 
-func ContainsEntityById(entitySlice []Entity, entityId string) bool {
+func ContainsEntityById(entitySlice []core.Entity, entityId string) bool {
 	for _, value := range entitySlice {
 		if value.Id == entityId {
 			return true

@@ -1,43 +1,44 @@
-package components
+package factories
 
 import (
 	"github.com/hajimehoshi/ebiten"
 	"BasicECS/components/weapons"
 	"BasicECS/enum"
+	cmpt "BasicECS/components"
 )
 
-func CreateSpeedComponent(speed int) Speed {
-	return Speed{
+func CreateSpeedComponent(speed int) cmpt.Speed {
+	return cmpt.Speed{
 		Speed: speed,
 	}
 }
 
-func CreateVelocityComponent(x int, y int) Velocity {
-	return Velocity{
+func CreateVelocityComponent(x int, y int) cmpt.Velocity {
+	return cmpt.Velocity{
 		X: x,
 		Y: y,
 	}
 }
 
-func CreatePositionComponent(x int, y int) Position {
-	return Position{
+func CreatePositionComponent(x int, y int) cmpt.Position {
+	return cmpt.Position{
 		X: x,
 		Y: y,
 	}
 }
 
-func CreateHealthComponent(health int) Health {
-	return Health{
+func CreateHealthComponent(health int) cmpt.Health {
+	return cmpt.Health{
 		Health: health,
 	}
 }
 
-func CreateInputComponent() Input {
-	return Input{}
+func CreateInputComponent() cmpt.Input {
+	return cmpt.Input{}
 }
 
-func CreateSpriteComponent(image *ebiten.Image) Sprite {
-	return Sprite{
+func CreateSpriteComponent(image *ebiten.Image) cmpt.Sprite {
+	return cmpt.Sprite{
 		Image: image,
 	}
 }
@@ -65,25 +66,25 @@ func CreateMagazineComponent(maxCapacity int, ammunition *weapons.Ammunition) we
 	}
 }
 
-func CreateDamageComponent(damageType DamageType, damage int) Damage {
-	return Damage {
+func CreateDamageComponent(damageType cmpt.DamageType, damage int) cmpt.Damage {
+	return cmpt.Damage {
 		Type: damageType,
 		Damage: damage,
 	}
 }
 
-func CreateColidableComponent() Collidable {
-	return Collidable{}
+func CreateColidableComponent() cmpt.Collidable {
+	return cmpt.Collidable{}
 }
 
-func CreateEquipableComponent(equipmentType enum.EquipmentType) Equippable {
-	return Equippable{
+func CreateEquipableComponent(equipmentType enum.EquipmentType) cmpt.Equippable {
+	return cmpt.Equippable{
 		EquipmentType: equipmentType,
 	}
 }
 
-func CreateEquipmentSlotComponent(equipmentType enum.EquipmentType) EquipmentSlot {
-	return EquipmentSlot{
+func CreateEquipmentSlotComponent(equipmentType enum.EquipmentType) cmpt.EquipmentSlot {
+	return cmpt.EquipmentSlot{
 		Type: equipmentType,
 	}
 }
@@ -100,18 +101,18 @@ func CreateAttachmentSlotComponent(attachmentType enum.AttachmentType) weapons.A
 	}
 }
 
-func CreateExpirableComponent() Expirable {
-	return Expirable{}
+func CreateExpirableComponent() cmpt.Expirable {
+	return cmpt.Expirable{}
 }
 
-func CreateInventoryComponent() Inventory {
-	return Inventory{}
+func CreateInventoryComponent() cmpt.Inventory {
+	return cmpt.Inventory{}
 }
 
-func CreateOwnableComponent() Ownable {
-	return Ownable{}
+func CreateOwnableComponent() cmpt.Ownable {
+	return cmpt.Ownable{}
 }
 
-func CreateMovableComponent() Movable {
-	return Movable{ true }
+func CreateMovableComponent() cmpt.Movable {
+	return cmpt.Movable{ true }
 }

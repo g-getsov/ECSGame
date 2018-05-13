@@ -1,13 +1,13 @@
 package systems
 
 import (
-	"BasicECS/entities"
 	"BasicECS/components"
+	"BasicECS/core"
 )
 
 type movementSystem struct {}
 
-func (s movementSystem) Update(dt float64, entityManager *entities.EntityManager) {
+func (s movementSystem) Update(dt float64, entityManager *core.EntityManager) {
 
 	entityIds := entityManager.GetAllEntitiesPossessingComponentsOfClass(components.GetMovableComponentName())
 

@@ -2,16 +2,17 @@ package main
 
 import (
 	"BasicECS/world"
-	"BasicECS/entities"
 	"BasicECS/systems"
 	"BasicECS/resources"
+	"BasicECS/factories"
+	"BasicECS/core"
 )
 
 func prepareWorld() world.World {
-	entityManager := entities.CreateEntityManager(500)
+	entityManager := core.CreateEntityManager(500)
 	systemManager := systems.CreateSystemManager()
 	imageManager := resources.CreateImageManager()
-	entityFactory := entities.CreateEntityFactory(&imageManager)
+	entityFactory := factories.CreateEntityFactory(&imageManager)
 	return world.CreateWorld(&entityManager, &entityFactory, &systemManager)
 }
 

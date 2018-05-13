@@ -1,15 +1,15 @@
 package systems
 
 import (
-	"BasicECS/entities"
 	"BasicECS/components"
 	inp "github.com/hajimehoshi/ebiten/inpututil"
 	"github.com/hajimehoshi/ebiten"
+	"BasicECS/core"
 )
 
 type inputSystem struct {}
 
-func (s inputSystem) Update(dt float64, entityManager *entities.EntityManager) {
+func (s inputSystem) Update(dt float64, entityManager *core.EntityManager) {
 
 	entityIds := entityManager.GetAllEntitiesPossessingComponentsOfClass(components.GetInputComponentName())
 

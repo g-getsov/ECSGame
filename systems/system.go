@@ -1,7 +1,9 @@
 package systems
 
-import "BasicECS/entities"
+import (
+	"BasicECS/core"
+)
 
 type System interface {
-	Update(dt float64, entityManager *entities.EntityManager)
+	Update(dt float64, entityManager *core.EntityManager)
 }

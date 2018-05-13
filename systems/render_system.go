@@ -1,16 +1,16 @@
 package systems
 
 import (
-	"BasicECS/entities"
 	"BasicECS/components"
 	"github.com/hajimehoshi/ebiten"
+	"BasicECS/core"
 )
 
 type renderSystem struct {
 	screen *ebiten.Image
 }
 
-func (s renderSystem) Update(dt float64, entityManager *entities.EntityManager) {
+func (s renderSystem) Update(dt float64, entityManager *core.EntityManager) {
 
 	entityIds := entityManager.GetAllEntitiesPossessingComponentsOfClass(components.GetSpriteComponentName())
 

@@ -1,18 +1,19 @@
 package world
 
 import (
-	"BasicECS/entities"
 	"BasicECS/systems"
 	"github.com/hajimehoshi/ebiten"
 	"time"
 	"fmt"
+	"BasicECS/factories"
+	"BasicECS/core"
 )
 
 var last = time.Now()
 
 type World struct {
-	entityManager *entities.EntityManager
-	entityFactory *entities.EntityFactory
+	entityManager *core.EntityManager
+	entityFactory *factories.EntityFactory
 	systemManager *systems.SystemManager
 	initialized bool
 }
@@ -68,8 +69,8 @@ func (w *World) Run() {
 }
 
 func CreateWorld(
-	entityManager *entities.EntityManager,
-	entityFactory *entities.EntityFactory,
+	entityManager *core.EntityManager,
+	entityFactory *factories.EntityFactory,
 	systemManager *systems.SystemManager) World {
 
 	return World{
