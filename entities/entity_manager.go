@@ -1,54 +1,58 @@
 package entities
 
 import (
-	"math"
 	"fmt"
 	cmpt "BasicECS/components"
+	"github.com/satori/go.uuid"
 )
 
 type EntityManager struct {
-	lowestUnassignedEntityId int
-	entities []Entity
-	componentsByClass map[string]map[int]cmpt.Component
+	maxNumEntities int
+	entities map[string]Entity
+	componentsByClass map[string]map[string]cmpt.Component
 }
 
-func (e *EntityManager) generateNewEntityId() int {
-	if e.lowestUnassignedEntityId < math.MaxInt32 {
-		e.lowestUnassignedEntityId++
-		return e.lowestUnassignedEntityId
+func (e *EntityManager) generateNewEntityId() string {
+
+	id, err := uuid.NewV4()
+
+	if err != nil {
+		fmt.Println("Something went wrong while generating a new entity id")
+		return ""
 	}
 
-	for i := 0; i < math.MaxInt32; i++ {
-		if ContainsEntityById(e.entities, i) {
-			return i
-		}
-	}
-
-	fmt.Println("No available entity ids")
-	return 0
+	return id.String()
 }
 
 func (e *EntityManager) CreateEntity() Entity {
 	id := e.generateNewEntityId()
-	entity := CreateNewEntity(id)
-	e.entities = append(e.entities, entity)
+
+	var entity Entity
+
+	if len(e.entities) >= e.maxNumEntities {
+		fmt.Println("Too many entities")
+		return entity
+	}
+
+	entity = CreateNewEntity(id)
+	e.entities[id] = entity
 	return entity
 }
 
-func (e *EntityManager) RemoveEntity(entityId int) {
+func (e *EntityManager) RemoveEntity(entityId string) {
 	for _, component := range e.componentsByClass {
 		if component[entityId] != nil {
 			delete(component, entityId)
 		}
 	}
-	e.entities = RemoveEntityById(e.entities, entityId)
+	delete(e.entities, entityId)
 }
 
-func (e *EntityManager) AddComponentToEntity(entityId int, component cmpt.Component) {
+func (e *EntityManager) AddComponentToEntity(entityId string, component cmpt.Component) {
 	e.AddComponentsToEntity(entityId, []cmpt.Component{component})
 }
 
-func (e *EntityManager) AddComponentsToEntity(entityId int, components []cmpt.Component) {
+func (e *EntityManager) AddComponentsToEntity(entityId string, components []cmpt.Component) {
 
 	for _, component := range components {
 
@@ -57,7 +61,7 @@ func (e *EntityManager) AddComponentsToEntity(entityId int, components []cmpt.Co
 		componentsForClass := e.componentsByClass[componentName]
 
 		if componentsForClass == nil {
-			componentsForClass := make(map[int]cmpt.Component)
+			componentsForClass := make(map[string]cmpt.Component)
 			componentsForClass[entityId] = component
 			e.componentsByClass[componentName] = componentsForClass
 			continue
@@ -67,16 +71,16 @@ func (e *EntityManager) AddComponentsToEntity(entityId int, components []cmpt.Co
 	}
 }
 
-func (e *EntityManager) GetComponentOfClass(componentName string, entityId int) cmpt.Component {
+func (e *EntityManager) GetComponentOfClass(componentName string, entityId string) cmpt.Component {
 	componentsForClass := e.componentsByClass[componentName]
 	if componentsForClass == nil { return nil }
 	return componentsForClass[entityId]
 }
-func (e *EntityManager) GetAllEntitiesPossessingComponentsOfClass(componentName string) []int {
+func (e *EntityManager) GetAllEntitiesPossessingComponentsOfClass(componentName string) []string {
 	componentsForClass := e.componentsByClass[componentName]
-	if componentsForClass == nil { return make([]int, 0)}
+	if componentsForClass == nil { return make([]string, 0)}
 
-	entitiesPossessingComponent := make([]int, len(componentsForClass))
+	entitiesPossessingComponent := make([]string, len(componentsForClass))
 	i := 0
 	for key := range componentsForClass {
 		entitiesPossessingComponent[i] = key
@@ -85,10 +89,10 @@ func (e *EntityManager) GetAllEntitiesPossessingComponentsOfClass(componentName 
 	return entitiesPossessingComponent
 }
 
-func CreateEntityManager() EntityManager {
+func CreateEntityManager(maxNumEntities int) EntityManager {
 	return EntityManager {
-		lowestUnassignedEntityId: 0,
-		entities: make([]Entity, 0),
-		componentsByClass: make(map[string]map[int]cmpt.Component),
+		maxNumEntities: maxNumEntities,
+		entities: make(map[string]Entity),
+		componentsByClass: make(map[string]map[string]cmpt.Component),
 	}
 }

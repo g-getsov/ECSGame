@@ -9,4 +9,4 @@ type Velocity struct {
 
 func (v Velocity) GetComponentName() string { return GetVelocityComponentName() }
 
-func GetVelocityComponentName() string {return velocityComponentName }
+func GetVelocityComponentName() string { return velocityComponentName }

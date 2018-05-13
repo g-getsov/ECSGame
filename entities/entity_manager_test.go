@@ -3,63 +3,74 @@ package entities
 import (
 	"testing"
 	"github.com/stretchr/testify/assert"
-	"math"
 	"BasicECS/components"
+	"strings"
 )
 
 func TestNewIdGeneration(t *testing.T) {
 
-	entityManager := CreateEntityManager()
+	entityManager := CreateEntityManager(4)
 	id := entityManager.generateNewEntityId()
 	secondId := entityManager.generateNewEntityId()
 
-	assert.Equal(t, 1, id)
-	assert.Equal(t, 2, secondId)
-	assert.Equal(t, entityManager.lowestUnassignedEntityId, 2)
+	assert.True(t, len(id) > 0)
+	assert.True(t, len(secondId) > 0)
+	assert.True(t, strings.Compare(id, secondId) != 0)
 }
 
 func TestFullIdGeneration(t *testing.T) {
 
-	entityManager := CreateEntityManager()
-	entityManager.lowestUnassignedEntityId = math.MaxInt32 - 1
+	entityManager := CreateEntityManager(1)
 
 	id := entityManager.generateNewEntityId()
 	secondId := entityManager.generateNewEntityId()
 
-	assert.Equal(t, math.MaxInt32, id)
-	assert.Equal(t, 0, secondId)
+	assert.True(t, len(id) > 0)
+	assert.True(t, len(secondId) > 0)
 }
 
 func TestCreateEntities(t *testing.T) {
 
-	entityManager := CreateEntityManager()
+	entityManager := CreateEntityManager(4)
 
 	entity := entityManager.CreateEntity()
 	secondEntity := entityManager.CreateEntity()
 
-	assert.Equal(t, 1, entity.Id)
-	assert.True(t, ContainsEntity(entityManager.entities, entity))
-	assert.NotNil(t, 2, secondEntity.Id)
-	assert.True(t, ContainsEntity(entityManager.entities, secondEntity))
+	assert.True(t, len(entity.Id) > 0)
+	_, ok := entityManager.entities[entity.Id]
+	assert.True(t, ok)
+	assert.True(t, len(secondEntity.Id) > 0)
+	_, ok = entityManager.entities[secondEntity.Id]
+	assert.True(t, ok)
 }
 
 func TestCreateEntitiesFullCapacity(t *testing.T) {
 
-	entityManager := CreateEntityManager()
-	entityManager.lowestUnassignedEntityId = math.MaxInt32 - 1
+	entityManager := CreateEntityManager(1)
 
 	entity := entityManager.CreateEntity()
 	secondEntity := entityManager.CreateEntity()
 
-	assert.Equal(t, math.MaxInt32, entity.Id)
-	assert.True(t, ContainsEntity(entityManager.entities, entity))
-	assert.NotNil(t, 0, secondEntity.Id)
-	assert.True(t, ContainsEntity(entityManager.entities, secondEntity))
+	assert.True(t, len(entity.Id) > 0)
+	_, ok := entityManager.entities[entity.Id]
+	assert.True(t, ok)
+
+	assert.True(t, strings.Compare(secondEntity.Id, "") == 0)
+	_, ok = entityManager.entities[secondEntity.Id]
+	assert.False(t, ok)
+
+	entityManager.RemoveEntity(entity.Id)
+
+	secondEntity = entityManager.CreateEntity()
+
+	assert.True(t, len(secondEntity.Id) > 0)
+	_, ok = entityManager.entities[secondEntity.Id]
+	assert.True(t, ok)
 }
 
 func TestAddComponentToEntity(t *testing.T) {
 
-	entityManager := CreateEntityManager()
+	entityManager := CreateEntityManager(4)
 
 	entity := entityManager.CreateEntity()
 	secondEntity := entityManager.CreateEntity()
@@ -89,7 +100,7 @@ func TestAddComponentToEntity(t *testing.T) {
 
 func TestAddComponentsToEntity(t *testing.T)  {
 
-	entityManager := CreateEntityManager()
+	entityManager := CreateEntityManager(4)
 
 	entity := entityManager.CreateEntity()
 	secondEntity := entityManager.CreateEntity()
@@ -119,7 +130,7 @@ func TestAddComponentsToEntity(t *testing.T)  {
 
 func TestGetComponentOfClass(t *testing.T) {
 
-	entityManager := CreateEntityManager()
+	entityManager := CreateEntityManager(4)
 
 	entity := entityManager.CreateEntity()
 	secondEntity := entityManager.CreateEntity()
@@ -149,7 +160,7 @@ func TestGetComponentOfClass(t *testing.T) {
 
 func TestRemoveEntity(t *testing.T) {
 
-	entityManager := CreateEntityManager()
+	entityManager := CreateEntityManager(4)
 
 	entity := entityManager.CreateEntity()
 	secondEntity := entityManager.CreateEntity()
@@ -171,7 +182,8 @@ func TestRemoveEntity(t *testing.T) {
 	returnedSpeedComponent := entityManager.GetComponentOfClass(speedComponentName, entity.Id)
 	assert.Nil(t, returnedSpeedComponent)
 
-	assert.False(t, ContainsEntity(entityManager.entities, entity))
+	_, ok := entityManager.entities[entity.Id]
+	assert.False(t, ok)
 
 	secondReturnedSpeedComponent := entityManager.GetComponentOfClass(speedComponentName, secondEntity.Id)
 	assert.NotNil(t, secondReturnedSpeedComponent)
@@ -179,7 +191,7 @@ func TestRemoveEntity(t *testing.T) {
 
 func TestGetAllEntitiesPossessingComponentsOfClass(t *testing.T) {
 
-	entityManager := CreateEntityManager()
+	entityManager := CreateEntityManager(4)
 
 	entity := entityManager.CreateEntity()
 	secondEntity := entityManager.CreateEntity()

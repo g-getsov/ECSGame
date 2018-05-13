@@ -57,7 +57,7 @@ func TestSystemManagerAddSystem(t *testing.T) {
 
 func TestSystemManagerProcessSystems(t *testing.T) {
 
-	entityManager := entities.CreateEntityManager()
+	entityManager := entities.CreateEntityManager(10)
 	testEntity := entityManager.CreateEntity()
 	entityManager.AddComponentToEntity(testEntity.Id, &testComponent{val:0})
 

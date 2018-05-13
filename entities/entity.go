@@ -1,10 +1,10 @@
 package entities
 
 type Entity struct {
-	Id int
+	Id string
 }
 
-func CreateNewEntity(id int) Entity {
+func CreateNewEntity(id string) Entity {
 	return Entity{
 		Id: id,
 	}

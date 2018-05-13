@@ -50,6 +50,12 @@ func controllerMovement(input *components.Input, position *components.Position, 
 	if input.BackwardsKey {
 		position.Y += speed.Speed
 	}
+	if input.LeftKey {
+		position.X -= speed.Speed
+	}
+	if input.RightKey {
+		position.X += speed.Speed
+	}
 }
 
 func aiMovement(position *components.Position, speed *components.Speed) {

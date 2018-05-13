@@ -33,6 +33,20 @@ func (s inputSystem) Update(dt float64, entityManager *entities.EntityManager) {
 			inputComponent.BackwardsKey = false
 		}
 
+		if inp.IsKeyJustPressed(ebiten.KeyLeft) || inp.IsKeyJustPressed(ebiten.KeyA) {
+			inputComponent.LeftKey = true
+		}
+		if inp.IsKeyJustReleased(ebiten.KeyLeft) || inp.IsKeyJustReleased(ebiten.KeyA) {
+			inputComponent.LeftKey = false
+		}
+
+		if inp.IsKeyJustPressed(ebiten.KeyRight) || inp.IsKeyJustPressed(ebiten.KeyD) {
+			inputComponent.RightKey = true
+		}
+		if inp.IsKeyJustReleased(ebiten.KeyRight) || inp.IsKeyJustReleased(ebiten.KeyD) {
+			inputComponent.RightKey = false
+		}
+
 		if inp.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) || inp.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 			inputComponent.ShootKey = true
 		}

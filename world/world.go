@@ -5,7 +5,7 @@ import (
 	"BasicECS/systems"
 	"github.com/hajimehoshi/ebiten"
 	"time"
-	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"fmt"
 )
 
 var last = time.Now()
@@ -26,6 +26,21 @@ func (w *World) initializeWorld(screen *ebiten.Image) {
 		100)
 
 	w.entityFactory.CreateZombie(w.entityManager)
+
+	w.entityFactory.CreateWeapon(
+		w.entityManager,
+		250,
+		250,
+		3,
+		5,
+		8)
+
+	w.entityFactory.CreateMagazine(
+		w.entityManager,
+		350,
+		350,
+		30)
+
 	w.systemManager.AddSystem(systems.CreateInputSystem())
 	w.systemManager.AddSystem(systems.CreateMovementSystem())
 	w.systemManager.AddSystem(systems.CreateRenderSystem(screen))
@@ -43,7 +58,7 @@ func (w *World) update(screen *ebiten.Image) error {
 	last = now
 
 	w.systemManager.ProcessSystems(delta, w.entityManager)
-	ebitenutil.DebugPrint(screen, "Hello world!")
+	fmt.Println("Current FPS:", ebiten.CurrentFPS())
 
 	return nil
 }

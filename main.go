@@ -8,7 +8,7 @@ import (
 )
 
 func prepareWorld() world.World {
-	entityManager := entities.CreateEntityManager()
+	entityManager := entities.CreateEntityManager(500)
 	systemManager := systems.CreateSystemManager()
 	imageManager := resources.CreateImageManager()
 	entityFactory := entities.CreateEntityFactory(&imageManager)
