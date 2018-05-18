@@ -8,6 +8,7 @@ type Input struct {
 	LeftKey bool
 	RightKey bool
 	ShootKey bool
+	InteractKey bool
 }
 
 func (i Input) GetComponentName() string { return GetInputComponentName() }

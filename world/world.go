@@ -42,8 +42,10 @@ func (w *World) initializeWorld(screen *ebiten.Image) {
 		350,
 		30)
 
+	w.systemManager.AddSystem(systems.CreateExpirationSystem())
 	w.systemManager.AddSystem(systems.CreateInputSystem())
 	w.systemManager.AddSystem(systems.CreateMovementSystem())
+	w.systemManager.AddSystem(systems.CreateCollisionSystem())
 	w.systemManager.AddSystem(systems.CreateRenderSystem(screen))
 }
 
@@ -59,7 +61,7 @@ func (w *World) update(screen *ebiten.Image) error {
 	last = now
 
 	w.systemManager.ProcessSystems(delta, w.entityManager)
-	fmt.Println("Current FPS:", ebiten.CurrentFPS())
+	fmt.Println("Current FPS:", ebiten.CurrentFPS(), " delta:", delta)
 
 	return nil
 }

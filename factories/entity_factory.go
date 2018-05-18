@@ -25,6 +25,7 @@ func (e *EntityFactory) CreateWeapon(entityManager *core.EntityManager, x int, y
 
 	weaponBaseComponent := CreateWeaponBaseComponent(fireRate, projectileSpeed, damage)
 	ownableComponent := CreateOwnableComponent()
+	expirableComponent := CreateExpirableComponent(5)
 	equipableComponent := CreateEquipableComponent(enum.MainHand)
 	positionComponent := CreatePositionComponent(x, y)
 	spriteComponent := CreateSpriteComponent(image)
@@ -35,6 +36,7 @@ func (e *EntityFactory) CreateWeapon(entityManager *core.EntityManager, x int, y
 		&ownableComponent,
 		&equipableComponent,
 		&spriteComponent,
+		&expirableComponent,
 	})
 }
 
@@ -90,6 +92,8 @@ func (e *EntityFactory) CreatePlayer(entityManager *core.EntityManager, x int, y
 	inputComponent := CreateInputComponent()
 	spriteComponent := CreateSpriteComponent(image)
 	movableComponent := CreateMovableComponent()
+	hitboxComponent := CreateHitboxComponent(64, 64, true)
+	inventoryComponent := CreateInventoryComponent()
 
 	entityManager.AddComponentsToEntity(entity.Id, []core.Component{
 		&positionComponent,
@@ -98,6 +102,8 @@ func (e *EntityFactory) CreatePlayer(entityManager *core.EntityManager, x int, y
 		&healthComponent,
 		&inputComponent,
 		&spriteComponent,
+		&hitboxComponent,
+		&inventoryComponent,
 	})
 }
 
@@ -111,6 +117,8 @@ func (e *EntityFactory) CreateZombie(entityManager *core.EntityManager) {
 	healthComponent := CreateHealthComponent(20)
 	spriteComponent := CreateSpriteComponent(image)
 	movableComponent := CreateMovableComponent()
+	hitboxComponent := CreateHitboxComponent(64, 64, true)
+	tooltipComponent := CreateTooltipComponent("Press 'E' to pick up")
 
 	entityManager.AddComponentsToEntity(entity.Id, []core.Component {
 		&positionComponent,
@@ -118,5 +126,7 @@ func (e *EntityFactory) CreateZombie(entityManager *core.EntityManager) {
 		&healthComponent,
 		&spriteComponent,
 		&movableComponent,
+		&hitboxComponent,
+		&tooltipComponent,
 	})
 }

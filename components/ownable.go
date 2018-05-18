@@ -2,7 +2,9 @@ package components
 
 const ownableComponentName = "Ownable"
 
-type Ownable struct {}
+type Ownable struct {
+	OwnerEntityId string
+}
 
 func (o Ownable) GetComponentName() string { return GetOwnableComponentName() }
 

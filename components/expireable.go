@@ -3,7 +3,7 @@ package components
 const expirableComponentName = "Expirable"
 
 type Expirable struct {
-	TimeLeft int
+	TimeLeft float64
 }
 
 func (e Expirable) GetComponentName() string { return GetExpirableComponentName() }

@@ -5,6 +5,7 @@ import (
 	"BasicECS/components/weapons"
 	"BasicECS/enum"
 	cmpt "BasicECS/components"
+	"BasicECS/closures"
 )
 
 func CreateSpeedComponent(speed int) cmpt.Speed {
@@ -73,8 +74,12 @@ func CreateDamageComponent(damageType cmpt.DamageType, damage int) cmpt.Damage {
 	}
 }
 
-func CreateColidableComponent() cmpt.Collidable {
-	return cmpt.Collidable{}
+func CreateHitboxComponent(width int, height int, isSolid bool) cmpt.Hitbox {
+	return cmpt.Hitbox{
+		Width: width,
+		Height: height,
+		IsSolid: isSolid,
+	}
 }
 
 func CreateEquipableComponent(equipmentType enum.EquipmentType) cmpt.Equippable {
@@ -101,12 +106,16 @@ func CreateAttachmentSlotComponent(attachmentType enum.AttachmentType) weapons.A
 	}
 }
 
-func CreateExpirableComponent() cmpt.Expirable {
-	return cmpt.Expirable{}
+func CreateExpirableComponent(expirationTime float64) cmpt.Expirable {
+	return cmpt.Expirable{
+		TimeLeft:expirationTime,
+	}
 }
 
 func CreateInventoryComponent() cmpt.Inventory {
-	return cmpt.Inventory{}
+	return cmpt.Inventory{
+		ItemEntityIds: make(map[string]bool, 0),
+	}
 }
 
 func CreateOwnableComponent() cmpt.Ownable {
@@ -115,4 +124,28 @@ func CreateOwnableComponent() cmpt.Ownable {
 
 func CreateMovableComponent() cmpt.Movable {
 	return cmpt.Movable{ true }
+}
+
+func CreateUsableComponent(usageFunc closures.UsageFunc) cmpt.Usable {
+	return cmpt.Usable{
+		Use:usageFunc,
+	}
+}
+
+func CreateInteractiveComponent(interactionFunc closures.InteractionFunc) cmpt.Interactive {
+	return cmpt.Interactive{
+		Interact:interactionFunc,
+	}
+}
+
+func CreateCollidedComponent() cmpt.Collided {
+	return cmpt.Collided{
+		CollidedEntities: make(map[string]bool, 0),
+	}
+}
+
+func CreateTooltipComponent(text string) cmpt.Tooltip {
+	return cmpt.Tooltip{
+		Text: text,
+	}
 }

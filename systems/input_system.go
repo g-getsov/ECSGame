@@ -15,7 +15,7 @@ func (s inputSystem) Update(dt float64, entityManager *core.EntityManager) {
 
 	for _, entityId := range entityIds {
 
-		inputComponent := entityManager.GetComponentOfClass(
+		inputComponent, _ := entityManager.GetComponentOfClass(
 			components.GetInputComponentName(),
 			entityId).(*components.Input)
 
@@ -52,6 +52,12 @@ func (s inputSystem) Update(dt float64, entityManager *core.EntityManager) {
 		}
 		if inp.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) || inp.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 			inputComponent.ShootKey = false
+		}
+
+		if inp.IsKeyJustPressed(ebiten.KeyE) {
+			inputComponent.InteractKey = true
+		} else {
+			inputComponent.InteractKey = false
 		}
 	}
 }

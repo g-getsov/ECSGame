@@ -3,7 +3,7 @@ package systems
 import (
 	"testing"
 	"github.com/stretchr/testify/assert"
-	"BasicECS/entities"
+	"BasicECS/core"
 )
 
 const testComponentName = "TestComponent"
@@ -20,7 +20,7 @@ func getTestComponentName() string {return testComponentName }
 //test system
 type testSystem struct {}
 
-func (s testSystem) Update(dt float64, entityManager *entities.EntityManager) {
+func (s testSystem) Update(dt float64, entityManager *core.EntityManager) {
 
 	entityIds := entityManager.GetAllEntitiesPossessingComponentsOfClass(getTestComponentName())
 
@@ -57,7 +57,7 @@ func TestSystemManagerAddSystem(t *testing.T) {
 
 func TestSystemManagerProcessSystems(t *testing.T) {
 
-	entityManager := entities.CreateEntityManager(10)
+	entityManager := core.CreateEntityManager(10)
 	testEntity := entityManager.CreateEntity()
 	entityManager.AddComponentToEntity(testEntity.Id, &testComponent{val:0})
 

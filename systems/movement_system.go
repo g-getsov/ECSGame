@@ -13,19 +13,19 @@ func (s movementSystem) Update(dt float64, entityManager *core.EntityManager) {
 
 	for _, entityId := range entityIds {
 
-		movableComponent := entityManager.GetComponentOfClass(
+		movableComponent, _ := entityManager.GetComponentOfClass(
 			components.GetMovableComponentName(),
 			entityId).(*components.Movable)
 
 		if !movableComponent.Movable { continue }
 
-		positionComponent := entityManager.GetComponentOfClass(
+		positionComponent, _ := entityManager.GetComponentOfClass(
 			components.GetPositionComponentName(),
 			entityId).(*components.Position)
 
 		if positionComponent == nil { continue }
 
-		speedComponent := entityManager.GetComponentOfClass(
+		speedComponent, _ := entityManager.GetComponentOfClass(
 			components.GetSpeedComponentName(),
 			entityId).(*components.Speed)
 

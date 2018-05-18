@@ -47,6 +47,13 @@ func (e *EntityManager) RemoveEntity(entityId string) {
 	delete(e.entities, entityId)
 }
 
+func (e EntityManager) RemoveComponentForEntity(entityId string, componentName string) {
+	componentsForClass := e.componentsByClass[componentName]
+	if componentsForClass != nil {
+		delete(componentsForClass, entityId)
+	}
+}
+
 func (e *EntityManager) AddComponentToEntity(entityId string, component Component) {
 	e.AddComponentsToEntity(entityId, []Component{component})
 }
