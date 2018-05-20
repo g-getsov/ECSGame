@@ -3,9 +3,10 @@ package systems
 import (
 	"BasicECS/core"
 	"BasicECS/components"
+	"BasicECS/factories"
 )
 
-type  expirationSystem struct {}
+type expirationSystem struct {}
 
 func (s expirationSystem) Update(dt float64, entityManager *core.EntityManager) {
 
@@ -31,7 +32,11 @@ func (s expirationSystem) Update(dt float64, entityManager *core.EntityManager) 
 		}
 
 		if expirableComponent.TimeLeft <= 0 {
-			entityManager.RemoveEntity(entityId)
+			entityManager.AddComponentToEntity(
+				entityId,
+				factories.CreateRemoveComponent())
+
+			entityManager.RemoveComponentForEntity(entityId, components.GetExpirableComponentName())
 		}
 	}
 }

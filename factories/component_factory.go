@@ -6,6 +6,7 @@ import (
 	"BasicECS/enum"
 	cmpt "BasicECS/components"
 	"BasicECS/closures"
+	"BasicECS/components/guis"
 )
 
 func CreateSpeedComponent(speed int) cmpt.Speed {
@@ -31,6 +32,7 @@ func CreatePositionComponent(x int, y int) cmpt.Position {
 func CreateHealthComponent(health int) cmpt.Health {
 	return cmpt.Health{
 		Health: health,
+		MaxHealth: health,
 	}
 }
 
@@ -38,9 +40,10 @@ func CreateInputComponent() cmpt.Input {
 	return cmpt.Input{}
 }
 
-func CreateSpriteComponent(image *ebiten.Image) cmpt.Sprite {
+func CreateSpriteComponent(image *ebiten.Image, thumbnail *ebiten.Image) cmpt.Sprite {
 	return cmpt.Sprite{
 		Image: image,
+		ThumbnailImage:thumbnail,
 	}
 }
 
@@ -112,9 +115,10 @@ func CreateExpirableComponent(expirationTime float64) cmpt.Expirable {
 	}
 }
 
-func CreateInventoryComponent() cmpt.Inventory {
+func CreateInventoryComponent(maxSize int) cmpt.Inventory {
 	return cmpt.Inventory{
-		ItemEntityIds: make(map[string]bool, 0),
+		MaxSize: maxSize,
+		ItemEntityIds: make([]string, maxSize),
 	}
 }
 
@@ -148,4 +152,28 @@ func CreateTooltipComponent(text string) cmpt.Tooltip {
 	return cmpt.Tooltip{
 		Text: text,
 	}
+}
+
+func CreateRemoveComponent() cmpt.Remove {
+	return cmpt.Remove{}
+}
+
+func CreateHiddenComponent() cmpt.Hidden {
+	return cmpt.Hidden{}
+}
+
+//GUI
+
+func CreateGuiComponent(entityId string) guis.Gui {
+	return guis.Gui{
+		EntityId:entityId,
+	}
+}
+
+func CreateCharacterStatsGuiComponent() guis.CharacterStatsGui {
+	return guis.CharacterStatsGui{}
+}
+
+func CreateInventoryGuiComponent() guis.InventoryGui {
+	return guis.InventoryGui{}
 }

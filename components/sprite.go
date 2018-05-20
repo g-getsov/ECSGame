@@ -6,6 +6,7 @@ const spriteComponentName = "Sprite"
 
 type Sprite struct {
 	Image *ebiten.Image
+	ThumbnailImage *ebiten.Image
 }
 
 func (s Sprite) GetComponentName() string { return GetSpriteComponentName() }

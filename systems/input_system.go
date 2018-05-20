@@ -59,6 +59,10 @@ func (s inputSystem) Update(dt float64, entityManager *core.EntityManager) {
 		} else {
 			inputComponent.InteractKey = false
 		}
+
+		if inp.IsKeyJustPressed(ebiten.KeyI) {
+			inputComponent.InventoryToggle = !inputComponent.InventoryToggle
+		}
 	}
 }
 

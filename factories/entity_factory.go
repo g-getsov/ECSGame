@@ -17,18 +17,22 @@ func CreateEntityFactory(imageManager *rsc.ImageManager) EntityFactory {
 	}
 }
 
-func (e *EntityFactory) CreateWeapon(entityManager *core.EntityManager, x int, y int, fireRate float32, projectileSpeed int, damage int) {
+func (e *EntityFactory) CreateWeapon(entityManager *core.EntityManager, x int, y int, fireRate float32, projectileSpeed int, damage int) string {
 
 	entity := entityManager.CreateEntity()
 
 	image := e.imageManager.GetImageOrLoad("gun.png")
+	thumbnail := e.imageManager.GetImageOrLoad("gun_thumbnail.png")
 
 	weaponBaseComponent := CreateWeaponBaseComponent(fireRate, projectileSpeed, damage)
 	ownableComponent := CreateOwnableComponent()
-	expirableComponent := CreateExpirableComponent(5)
+	expirableComponent := CreateExpirableComponent(10)
 	equipableComponent := CreateEquipableComponent(enum.MainHand)
 	positionComponent := CreatePositionComponent(x, y)
-	spriteComponent := CreateSpriteComponent(image)
+	spriteComponent := CreateSpriteComponent(image, thumbnail)
+	tooltipComponent := CreateTooltipComponent("Press 'E' to pick up")
+	hitboxComponent := CreateHitboxComponent(64,64, false)
+	interactiveComponent := CreateInteractiveComponent(PickUp)
 
 	entityManager.AddComponentsToEntity(entity.Id, []core.Component{
 		&positionComponent,
@@ -37,20 +41,29 @@ func (e *EntityFactory) CreateWeapon(entityManager *core.EntityManager, x int, y
 		&equipableComponent,
 		&spriteComponent,
 		&expirableComponent,
+		&tooltipComponent,
+		&hitboxComponent,
+		&interactiveComponent,
 	})
+
+	return entity.Id
 }
 
-func (e *EntityFactory) CreateMagazine(entityManager *core.EntityManager, x int, y int, maxCapacity int) {
+func (e *EntityFactory) CreateMagazine(entityManager *core.EntityManager, x int, y int, maxCapacity int) string {
 
 	entity := entityManager.CreateEntity()
 
 	image := e.imageManager.GetImageOrLoad("magazine.png")
+	thumbnail := e.imageManager.GetImageOrLoad("missing_thumbnail.png")
 
 	magazineComponent := CreateMagazineComponent(maxCapacity, nil)
 	ownableComponent := CreateOwnableComponent()
 	attachableComponent := CreateAttachableComponent(enum.Mag)
 	positionComponent := CreatePositionComponent(x, y)
-	spriteComponent := CreateSpriteComponent(image)
+	spriteComponent := CreateSpriteComponent(image, thumbnail)
+	tooltipComponent := CreateTooltipComponent("Press 'E' to pick up")
+	hitboxComponent := CreateHitboxComponent(64,64, false)
+	interactiveComponent := CreateInteractiveComponent(PickUp)
 
 	entityManager.AddComponentsToEntity(entity.Id, []core.Component{
 		&positionComponent,
@@ -58,10 +71,15 @@ func (e *EntityFactory) CreateMagazine(entityManager *core.EntityManager, x int,
 		&ownableComponent,
 		&attachableComponent,
 		&spriteComponent,
+		&tooltipComponent,
+		&hitboxComponent,
+		&interactiveComponent,
 	})
+
+	return entity.Id
 }
 
-func (e *EntityFactory) CreateBullet(entityManager *core.EntityManager, x int, y int, speed int, ammunition *weapons.Ammunition) {
+func (e *EntityFactory) CreateBullet(entityManager *core.EntityManager, x int, y int, speed int, ammunition *weapons.Ammunition) string {
 
 	entity := entityManager.CreateEntity()
 
@@ -69,7 +87,7 @@ func (e *EntityFactory) CreateBullet(entityManager *core.EntityManager, x int, y
 
 	positionComponent := CreatePositionComponent(x,y)
 	speedComponent := CreateSpeedComponent(speed)
-	spriteComponent := CreateSpriteComponent(image)
+	spriteComponent := CreateSpriteComponent(image, nil)
 	movableComponent := CreateMovableComponent()
 
 
@@ -79,9 +97,11 @@ func (e *EntityFactory) CreateBullet(entityManager *core.EntityManager, x int, y
 		&movableComponent,
 		&spriteComponent,
 	})
+
+	return entity.Id
 }
 
-func (e *EntityFactory) CreatePlayer(entityManager *core.EntityManager, x int, y int, speed int, health int) {
+func (e *EntityFactory) CreatePlayer(entityManager *core.EntityManager, x int, y int, speed int, health int) string {
 	entity := entityManager.CreateEntity()
 
 	image := e.imageManager.GetImageOrLoad("player.png")
@@ -90,10 +110,10 @@ func (e *EntityFactory) CreatePlayer(entityManager *core.EntityManager, x int, y
 	speedComponent := CreateSpeedComponent(speed)
 	healthComponent := CreateHealthComponent(health)
 	inputComponent := CreateInputComponent()
-	spriteComponent := CreateSpriteComponent(image)
+	spriteComponent := CreateSpriteComponent(image, nil)
 	movableComponent := CreateMovableComponent()
 	hitboxComponent := CreateHitboxComponent(64, 64, true)
-	inventoryComponent := CreateInventoryComponent()
+	inventoryComponent := CreateInventoryComponent(100)
 
 	entityManager.AddComponentsToEntity(entity.Id, []core.Component{
 		&positionComponent,
@@ -105,9 +125,11 @@ func (e *EntityFactory) CreatePlayer(entityManager *core.EntityManager, x int, y
 		&hitboxComponent,
 		&inventoryComponent,
 	})
+
+	return entity.Id
 }
 
-func (e *EntityFactory) CreateZombie(entityManager *core.EntityManager) {
+func (e *EntityFactory) CreateZombie(entityManager *core.EntityManager) string {
 	entity := entityManager.CreateEntity()
 
 	image := e.imageManager.GetImageOrLoad("wolf.png")
@@ -115,10 +137,10 @@ func (e *EntityFactory) CreateZombie(entityManager *core.EntityManager) {
 	positionComponent := CreatePositionComponent(50,50)
 	speedComponent := CreateSpeedComponent(1)
 	healthComponent := CreateHealthComponent(20)
-	spriteComponent := CreateSpriteComponent(image)
+	spriteComponent := CreateSpriteComponent(image, nil)
 	movableComponent := CreateMovableComponent()
 	hitboxComponent := CreateHitboxComponent(64, 64, true)
-	tooltipComponent := CreateTooltipComponent("Press 'E' to pick up")
+	tooltipComponent := CreateTooltipComponent("Grrrr... !")
 
 	entityManager.AddComponentsToEntity(entity.Id, []core.Component {
 		&positionComponent,
@@ -129,4 +151,23 @@ func (e *EntityFactory) CreateZombie(entityManager *core.EntityManager) {
 		&hitboxComponent,
 		&tooltipComponent,
 	})
+
+	return entity.Id
+}
+
+func (e *EntityFactory) CreateGui(entityManager *core.EntityManager, entityId string) string {
+
+	entity := entityManager.CreateEntity()
+
+	guiComponent := CreateGuiComponent(entityId)
+	characterStatsGuiComponent := CreateCharacterStatsGuiComponent()
+	inventoryGuiComponent := CreateInventoryGuiComponent()
+
+	entityManager.AddComponentsToEntity(entity.Id, []core.Component {
+		&guiComponent,
+		&characterStatsGuiComponent,
+		&inventoryGuiComponent,
+	})
+
+	return entity.Id
 }

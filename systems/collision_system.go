@@ -5,6 +5,7 @@ import (
 	"BasicECS/core"
 	"strings"
 	"BasicECS/factories"
+	"BasicECS/utils"
 )
 
 type collisionSystem struct {}
@@ -14,6 +15,8 @@ func (s collisionSystem) Update(dt float64, entityManager *core.EntityManager) {
 	entityIds := entityManager.GetAllEntitiesPossessingComponentsOfClass(cmpt.GetHitboxComponentName())
 
 	for _, entityId := range entityIds {
+
+		if utils.IsEntityHidden(entityManager, entityId) { continue }
 
 		hitboxComponent, _ := entityManager.GetComponentOfClass(
 			cmpt.GetHitboxComponentName(),
@@ -29,6 +32,8 @@ func (s collisionSystem) Update(dt float64, entityManager *core.EntityManager) {
 		//hasCollidedWithAnything := false
 
 		for _, collidingEntityId := range entityIds {
+
+			if utils.IsEntityHidden(entityManager, entityId) { continue }
 
 			if strings.Compare(entityId, collidingEntityId) == 0 { continue }
 

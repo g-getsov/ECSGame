@@ -7,9 +7,14 @@ import (
 	"fmt"
 	"BasicECS/factories"
 	"BasicECS/core"
+	"github.com/hajimehoshi/ebiten/text"
+	"github.com/hajimehoshi/go-mplusbitmap"
+	"BasicECS/enum"
 )
 
-var last = time.Now()
+var LAST = time.Now()
+var SCREEN_WIDTH = 640
+var SCREEN_HEIGHT = 480
 
 type World struct {
 	entityManager *core.EntityManager
@@ -19,7 +24,7 @@ type World struct {
 }
 
 func (w *World) initializeWorld(screen *ebiten.Image) {
-	w.entityFactory.CreatePlayer(
+	playerEntityId := w.entityFactory.CreatePlayer(
 		w.entityManager,
 		550,
 		240,
@@ -42,11 +47,37 @@ func (w *World) initializeWorld(screen *ebiten.Image) {
 		350,
 		30)
 
+	w.entityFactory.CreateMagazine(
+		w.entityManager,
+		250,
+		350,
+		30)
+
+	w.entityFactory.CreateMagazine(
+		w.entityManager,
+		150,
+		350,
+		30)
+
+	w.entityFactory.CreateMagazine(
+		w.entityManager,
+		50,
+		350,
+		30)
+
+	w.entityFactory.CreateGui(
+		w.entityManager,
+		playerEntityId,
+	)
+
+	w.systemManager.AddSystem(systems.CreateRemovalSystem())
 	w.systemManager.AddSystem(systems.CreateExpirationSystem())
 	w.systemManager.AddSystem(systems.CreateInputSystem())
 	w.systemManager.AddSystem(systems.CreateMovementSystem())
 	w.systemManager.AddSystem(systems.CreateCollisionSystem())
 	w.systemManager.AddSystem(systems.CreateRenderSystem(screen))
+	w.systemManager.AddSystem(systems.CreateInteractionSystem())
+	w.systemManager.AddSystem(systems.CreateGuiRenderSystem(screen))
 }
 
 func (w *World) update(screen *ebiten.Image) error {
@@ -57,11 +88,15 @@ func (w *World) update(screen *ebiten.Image) error {
 	}
 
 	now := time.Now()
-	delta := float64(now.Sub(last))/float64(time.Second)
-	last = now
+	delta := float64(now.Sub(LAST))/float64(time.Second)
+	LAST = now
 
 	w.systemManager.ProcessSystems(delta, w.entityManager)
-	fmt.Println("Current FPS:", ebiten.CurrentFPS(), " delta:", delta)
+
+	fpsString := fmt.Sprintf("Current FPS: %f, delta: %f", ebiten.CurrentFPS(), delta)
+
+	text.Draw(screen, fpsString, mplusbitmap.Gothic12r, 30, 10, enum.GREY)
+
 
 	return nil
 }

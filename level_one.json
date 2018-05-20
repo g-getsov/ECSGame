@@ -1,0 +1,30 @@
+{
+  "tilemap": {
+    "height": 50,
+    "width": 50,
+    "layers": [
+      {
+        "name": "Layer1",
+        "tiles": [
+          {
+            "x": 1,
+            "y": 1
+            "tilesetId": 1,
+            "imageId": 1
+          }
+        ]
+      }
+    ]
+  },
+  "tilesets": [
+    {
+      "id": 1,
+      "images": [
+        {
+          "id": 1,
+          "path": "example/tile1"
+        }
+      ]
+    }
+  ]
+}

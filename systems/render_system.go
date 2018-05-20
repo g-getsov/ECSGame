@@ -6,10 +6,9 @@ import (
 	"BasicECS/core"
 	"github.com/hajimehoshi/ebiten/text"
 	"github.com/hajimehoshi/go-mplusbitmap"
-	"image/color"
+	"BasicECS/utils"
+	"BasicECS/enum"
 )
-
-var tooltipColor = color.RGBA{0x80, 0x80, 0x80, 0x80}
 
 type renderSystem struct {
 	screen *ebiten.Image
@@ -25,6 +24,8 @@ func (s renderSystem) renderSprites(entityManager *core.EntityManager) {
 	spriteEntityIds := entityManager.GetAllEntitiesPossessingComponentsOfClass(components.GetSpriteComponentName())
 
 	for _, entityId := range spriteEntityIds {
+
+		if utils.IsEntityHidden(entityManager, entityId) { continue }
 
 		positionComponent, _ := entityManager.GetComponentOfClass(
 			components.GetPositionComponentName(),
@@ -49,6 +50,8 @@ func (s renderSystem) renderTooltips(entityManager *core.EntityManager) {
 	// Show tooltip
 	for _, entityId := range tooltipEntityIds {
 
+		if utils.IsEntityHidden(entityManager, entityId) { continue }
+
 		collidedComponent, _ := entityManager.GetComponentOfClass(
 			components.GetCollidedComponentName(),
 			entityId).(*components.Collided)
@@ -65,7 +68,7 @@ func (s renderSystem) renderTooltips(entityManager *core.EntityManager) {
 			components.GetTooltipComponentName(),
 			entityId).(*components.Tooltip)
 
-		text.Draw(s.screen, tooltipComponent.Text, mplusbitmap.Gothic12r, positionComponent.X, positionComponent.Y, tooltipColor)
+		text.Draw(s.screen, tooltipComponent.Text, mplusbitmap.Gothic12r, positionComponent.X, positionComponent.Y, enum.GREY)
 	}
 }
 
