@@ -8,6 +8,8 @@ type Magazine struct {
 	Ammunition *Ammunition
 }
 
-func (v Magazine) GetComponentName() string { return GetMagazineComponentName() }
+func (m Magazine) GetComponentName() string { return GetMagazineComponentName() }
+
+func (m Magazine) IsUniquePerEntity() bool { return true }
 
 func GetMagazineComponentName() string {return magazineComponentName }

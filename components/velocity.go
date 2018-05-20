@@ -9,4 +9,6 @@ type Velocity struct {
 
 func (v Velocity) GetComponentName() string { return GetVelocityComponentName() }
 
+func (v Velocity) IsUniquePerEntity() bool { return true }
+
 func GetVelocityComponentName() string { return velocityComponentName }

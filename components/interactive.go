@@ -8,6 +8,8 @@ type Interactive struct {
 	Interact closures.InteractionFunc
 }
 
-func (e Interactive) GetComponentName() string { return GetInteractiveComponentName() }
+func (i Interactive) GetComponentName() string { return GetInteractiveComponentName() }
+
+func (i Interactive) IsUniquePerEntity() bool { return true }
 
 func GetInteractiveComponentName() string { return interactiveComponentName }

@@ -15,6 +15,8 @@ type Ammunition struct {
 	AmmunitionType AmmunitionType
 }
 
-func (v Ammunition) GetComponentName() string { return GetAmmunitionComponentName() }
+func (a Ammunition) GetComponentName() string { return GetAmmunitionComponentName() }
+
+func (a Ammunition) IsUniquePerEntity() bool { return true }
 
 func GetAmmunitionComponentName() string {return ammunitionComponentName }

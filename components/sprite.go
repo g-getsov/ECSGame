@@ -11,4 +11,6 @@ type Sprite struct {
 
 func (s Sprite) GetComponentName() string { return GetSpriteComponentName() }
 
+func (s Sprite) IsUniquePerEntity() bool { return true }
+
 func GetSpriteComponentName() string {return spriteComponentName }

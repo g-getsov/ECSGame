@@ -8,6 +8,8 @@ type Hitbox struct {
 	IsSolid bool
 }
 
-func (c Hitbox) GetComponentName() string { return GetHitboxComponentName() }
+func (h Hitbox) GetComponentName() string { return GetHitboxComponentName() }
+
+func (h Hitbox) IsUniquePerEntity() bool { return true }
 
 func GetHitboxComponentName() string {return hitboxComponentName }

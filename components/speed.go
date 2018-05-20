@@ -8,4 +8,6 @@ type Speed struct {
 
 func (s Speed) GetComponentName() string { return GetSpeedComponentName() }
 
+func (s Speed) IsUniquePerEntity() bool { return true }
+
 func GetSpeedComponentName() string {return speedComponentName }

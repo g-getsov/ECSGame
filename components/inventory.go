@@ -11,6 +11,8 @@ type Inventory struct {
 
 func (i Inventory) GetComponentName() string { return GetInventoryComponentName() }
 
+func (i Inventory) IsUniquePerEntity() bool { return true }
+
 func (i *Inventory) AddItem(entityId string) bool {
 
 	idx, hasEmptySpace := i.findFirstFreeSlot()

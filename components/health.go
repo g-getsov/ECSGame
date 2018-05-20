@@ -9,4 +9,6 @@ type Health struct {
 
 func (h Health) GetComponentName() string { return GetHealthComponentName() }
 
+func (h Health) IsUniquePerEntity() bool { return true }
+
 func GetHealthComponentName() string {return healthComponentName }

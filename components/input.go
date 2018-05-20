@@ -14,4 +14,6 @@ type Input struct {
 
 func (i Input) GetComponentName() string { return GetInputComponentName() }
 
+func (i Input) IsUniquePerEntity() bool { return true }
+
 func GetInputComponentName() string {return inputComponentName }

@@ -9,4 +9,6 @@ type Expirable struct {
 
 func (e Expirable) GetComponentName() string { return GetExpirableComponentName() }
 
+func (e Expirable) IsUniquePerEntity() bool { return true }
+
 func GetExpirableComponentName() string { return expirableComponentName }

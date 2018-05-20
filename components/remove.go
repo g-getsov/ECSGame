@@ -8,4 +8,6 @@ type Remove struct {
 
 func (r Remove) GetComponentName() string { return GetRemoveComponentName() }
 
+func (r Remove) IsUniquePerEntity() bool { return true }
+
 func GetRemoveComponentName() string {return removeComponentName }

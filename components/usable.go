@@ -8,6 +8,8 @@ type Usable struct {
 	Use closures.UsageFunc
 }
 
-func (e Usable) GetComponentName() string { return GetUsableComponentName() }
+func (u Usable) GetComponentName() string { return GetUsableComponentName() }
+
+func (u Usable) IsUniquePerEntity() bool { return true }
 
 func GetUsableComponentName() string { return usableComponentName }

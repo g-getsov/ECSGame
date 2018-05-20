@@ -8,4 +8,6 @@ type Collided struct {
 
 func (c Collided) GetComponentName() string { return GetCollidedComponentName() }
 
+func (c Collided) IsUniquePerEntity() bool { return true }
+
 func GetCollidedComponentName() string {return collidedComponentName }

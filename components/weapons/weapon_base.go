@@ -10,4 +10,6 @@ type WeaponBase struct {
 
 func (w WeaponBase) GetComponentName() string { return GetWeaponBaseComponentName() }
 
+func (w WeaponBase) IsUniquePerEntity() bool { return true }
+
 func GetWeaponBaseComponentName() string {return weaponBaseName }

@@ -9,6 +9,8 @@ type AttachmentSlot struct {
 	Type enum.AttachmentType
 }
 
-func (e AttachmentSlot) GetComponentName() string { return GetAttachmentSlotComponentName() }
+func (a AttachmentSlot) GetComponentName() string { return GetAttachmentSlotComponentName() }
+
+func (a AttachmentSlot) IsUniquePerEntity() bool { return true }
 
 func GetAttachmentSlotComponentName() string {return attachmentSlotComponentName }

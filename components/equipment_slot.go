@@ -11,4 +11,6 @@ type EquipmentSlot struct {
 
 func (e EquipmentSlot) GetComponentName() string { return GetEquipmentSlotComponentName() }
 
+func (e EquipmentSlot) IsUniquePerEntity() bool { return true }
+
 func GetEquipmentSlotComponentName() string { return equipmentSlotComponentName }

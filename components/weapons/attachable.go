@@ -8,6 +8,8 @@ type Attachable struct {
 	AttachmentType enum.AttachmentType
 }
 
-func (e Attachable) GetComponentName() string { return GetAttachableComponentName() }
+func (a Attachable) GetComponentName() string { return GetAttachableComponentName() }
+
+func (a Attachable) IsUniquePerEntity() bool { return true }
 
 func GetAttachableComponentName() string {return attachableComponentName }

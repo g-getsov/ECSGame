@@ -17,6 +17,8 @@ type Damage struct {
 	Damage int
 }
 
-func (v Damage) GetComponentName() string { return GetDamageComponentName() }
+func (d Damage) GetComponentName() string { return GetDamageComponentName() }
+
+func (d Damage) IsUniquePerEntity() bool { return true }
 
 func GetDamageComponentName() string {return damageComponentName }
