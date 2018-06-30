@@ -11,9 +11,12 @@ const (
 )
 
 type Ammunition struct {
+	Id string
 	Damage int
 	AmmunitionType AmmunitionType
 }
+
+func (a Ammunition) GetComponentId() string { return a.Id }
 
 func (a Ammunition) GetComponentName() string { return GetAmmunitionComponentName() }
 

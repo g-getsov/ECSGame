@@ -2,7 +2,11 @@ package guis
 
 const InventoryGuiComponentName = "InventoryGui"
 
-type InventoryGui struct {}
+type InventoryGui struct {
+	Id string
+}
+
+func (i InventoryGui) GetComponentId() string { return i.Id }
 
 func (i InventoryGui) GetComponentName() string { return GetInvnetoryGuiComponentName() }
 

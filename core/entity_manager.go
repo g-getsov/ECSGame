@@ -2,29 +2,17 @@ package core
 
 import (
 	"fmt"
-	"github.com/satori/go.uuid"
+	"BasicECS/utils/uidutils"
 )
 
 type EntityManager struct {
 	maxNumEntities int
 	entities map[string]Entity
-	componentsByClass map[string]map[string]Component
-}
-
-func (e *EntityManager) generateNewEntityId() string {
-
-	id, err := uuid.NewV4()
-
-	if err != nil {
-		fmt.Println("Something went wrong while generating a new entity id")
-		return ""
-	}
-
-	return id.String()
+	componentsByClass map[string]map[string]map[string]Component //componentName -> entityId -> componentId
 }
 
 func (e *EntityManager) CreateEntity() Entity {
-	id := e.generateNewEntityId()
+	id := uidutils.GenerateNewUniqueId()
 
 	var entity Entity
 
@@ -47,7 +35,7 @@ func (e *EntityManager) RemoveEntity(entityId string) {
 	delete(e.entities, entityId)
 }
 
-func (e EntityManager) RemoveComponentForEntity(entityId string, componentName string) {
+func (e *EntityManager) RemoveComponentForEntity(entityId string, componentName string) {
 	componentsForClass := e.componentsByClass[componentName]
 	if componentsForClass != nil {
 		delete(componentsForClass, entityId)
@@ -67,21 +55,77 @@ func (e *EntityManager) AddComponentsToEntity(entityId string, components []Comp
 		componentsForClass := e.componentsByClass[componentName]
 
 		if componentsForClass == nil {
-			componentsForClass := make(map[string]Component)
-			componentsForClass[entityId] = component
+			componentsForClass := make(map[string]map[string]Component)
 			e.componentsByClass[componentName] = componentsForClass
-			continue
 		}
 
-		componentsForClass[entityId] = component
+		// if component is unique disassociate all existing components
+		if component.IsUniquePerEntity() {
+			e.componentsByClass[componentName][entityId] = make(map[string]Component)
+		}
+
+		if e.componentsByClass[componentName][entityId] == nil {
+			e.componentsByClass[componentName][entityId] = make(map[string]Component)
+		}
+
+		e.componentsByClass[componentName][entityId][component.GetComponentId()] = component
 	}
 }
 
 func (e *EntityManager) GetComponentOfClass(componentName string, entityId string) Component {
+
 	componentsForClass := e.componentsByClass[componentName]
+
 	if componentsForClass == nil { return nil }
-	return componentsForClass[entityId]
+
+	componentsForEntity := componentsForClass[entityId]
+
+	if componentsForEntity == nil { return nil }
+
+	for _, component := range componentsForEntity {
+		if !component.IsUniquePerEntity() {
+			panic(fmt.Sprintf(
+				"Trying to retrieve non-unique component of class %s as unique !",
+				component.GetComponentName()))
+		}
+		return component
+	}
+
+	return nil
 }
+
+func (e *EntityManager) GetComponent(componentName string, entityId string, componentId string) Component {
+
+	componentsForClass := e.componentsByClass[componentName]
+
+	if componentsForClass == nil { return nil }
+
+	componentsForEntity := componentsForClass[entityId]
+
+	if componentsForEntity == nil { return nil }
+
+	return componentsForEntity[componentId]
+}
+
+func (e *EntityManager) GetComponentsOfClass(componentName string, entityId string) []Component {
+
+	componentsForClass := e.componentsByClass[componentName]
+
+	if componentsForClass == nil { return nil }
+
+	componentsForEntity := componentsForClass[entityId]
+
+	if componentsForEntity == nil { return nil }
+
+	components := make([]Component, len(componentsForEntity))
+
+	for _, component := range componentsForEntity {
+		components = append(components, component)
+	}
+
+	return components
+}
+
 func (e *EntityManager) GetAllEntitiesPossessingComponentsOfClass(componentName string) []string {
 	componentsForClass := e.componentsByClass[componentName]
 	if componentsForClass == nil { return make([]string, 0)}
@@ -99,6 +143,6 @@ func CreateEntityManager(maxNumEntities int) EntityManager {
 	return EntityManager {
 		maxNumEntities: maxNumEntities,
 		entities: make(map[string]Entity),
-		componentsByClass: make(map[string]map[string]Component),
+		componentsByClass: make(map[string]map[string]map[string]Component),
 	}
 }

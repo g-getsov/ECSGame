@@ -21,13 +21,13 @@ func (m *ImageManager) LoadImage(path string) *ebiten.Image {
 	loadedImage, _, err := ebitenutil.NewImageFromFile(path, ebiten.FilterDefault)
 
 	if err != nil {
-		fmt.Println("Could not load image at path %s", path)
+		fmt.Println("Could not load image at path", path)
 		return nil
 	}
 
 	m.images[path] = loadedImage
 
-	fmt.Println("Successfully loaded image %s", path)
+	fmt.Println("Successfully loaded image", path)
 
 	return loadedImage
 }

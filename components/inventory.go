@@ -5,9 +5,12 @@ import "strings"
 const inventoryComponentName = "Inventory"
 
 type Inventory struct {
+	Id string
 	MaxSize int
 	ItemEntityIds []string
 }
+
+func (i Inventory) GetComponentId() string { return i.Id }
 
 func (i Inventory) GetComponentName() string { return GetInventoryComponentName() }
 

@@ -3,15 +3,15 @@ package core
 import (
 	"testing"
 	"github.com/stretchr/testify/assert"
-	"BasicECS/components"
 	"strings"
+	"BasicECS/factories"
+	"BasicECS/utils/uidutils"
 )
 
 func TestNewIdGeneration(t *testing.T) {
 
-	entityManager := CreateEntityManager(4)
-	id := entityManager.generateNewEntityId()
-	secondId := entityManager.generateNewEntityId()
+	id := uidutils.GenerateNewUniqueId()
+	secondId := uidutils.GenerateNewUniqueId()
 
 	assert.True(t, len(id) > 0)
 	assert.True(t, len(secondId) > 0)
@@ -20,10 +20,8 @@ func TestNewIdGeneration(t *testing.T) {
 
 func TestFullIdGeneration(t *testing.T) {
 
-	entityManager := CreateEntityManager(1)
-
-	id := entityManager.generateNewEntityId()
-	secondId := entityManager.generateNewEntityId()
+	id := uidutils.GenerateNewUniqueId()
+	secondId := uidutils.GenerateNewUniqueId()
 
 	assert.True(t, len(id) > 0)
 	assert.True(t, len(secondId) > 0)
@@ -75,8 +73,8 @@ func TestAddComponentToEntity(t *testing.T) {
 	entity := entityManager.CreateEntity()
 	secondEntity := entityManager.CreateEntity()
 
-	speedComponent := components.CreateSpeedComponent(32)
-	healthComponent := components.CreateHealthComponent(10)
+	speedComponent := factories.CreateSpeedComponent(32)
+	healthComponent := factories.CreateHealthComponent(10)
 
 	healthComponentName := healthComponent.GetComponentName()
 	speedComponentName := speedComponent.GetComponentName()
@@ -105,8 +103,8 @@ func TestAddComponentsToEntity(t *testing.T)  {
 	entity := entityManager.CreateEntity()
 	secondEntity := entityManager.CreateEntity()
 
-	speedComponent := components.CreateSpeedComponent(32)
-	healthComponent := components.CreateHealthComponent(10)
+	speedComponent := factories.CreateSpeedComponent(32)
+	healthComponent := factories.CreateHealthComponent(10)
 
 	healthComponentName := healthComponent.GetComponentName()
 	speedComponentName := speedComponent.GetComponentName()
@@ -114,8 +112,8 @@ func TestAddComponentsToEntity(t *testing.T)  {
 	assert.Nil(t, entityManager.componentsByClass[speedComponentName])
 	assert.Nil(t, entityManager.componentsByClass[healthComponentName])
 
-	entityManager.AddComponentsToEntity(entity.Id, []components.Component{speedComponent, healthComponent})
-	entityManager.AddComponentsToEntity(secondEntity.Id, []components.Component{healthComponent})
+	entityManager.AddComponentsToEntity(entity.Id, []Component{speedComponent, healthComponent})
+	entityManager.AddComponentsToEntity(secondEntity.Id, []Component{healthComponent})
 
 	assert.NotNil(t, entityManager.componentsByClass[speedComponentName])
 	assert.NotNil(t, entityManager.componentsByClass[healthComponentName])
@@ -135,8 +133,8 @@ func TestGetComponentOfClass(t *testing.T) {
 	entity := entityManager.CreateEntity()
 	secondEntity := entityManager.CreateEntity()
 
-	speedComponent := components.CreateSpeedComponent(32)
-	healthComponent := components.CreateHealthComponent(10)
+	speedComponent := factories.CreateSpeedComponent(32)
+	healthComponent := factories.CreateHealthComponent(10)
 
 	healthComponentName := healthComponent.GetComponentName()
 	speedComponentName := speedComponent.GetComponentName()
@@ -165,7 +163,7 @@ func TestRemoveEntity(t *testing.T) {
 	entity := entityManager.CreateEntity()
 	secondEntity := entityManager.CreateEntity()
 
-	speedComponent := components.CreateSpeedComponent(32)
+	speedComponent := factories.CreateSpeedComponent(32)
 
 	speedComponentName := speedComponent.GetComponentName()
 
@@ -196,8 +194,8 @@ func TestGetAllEntitiesPossessingComponentsOfClass(t *testing.T) {
 	entity := entityManager.CreateEntity()
 	secondEntity := entityManager.CreateEntity()
 
-	speedComponent := components.CreateSpeedComponent(32)
-	healthComponent := components.CreateHealthComponent(10)
+	speedComponent := factories.CreateSpeedComponent(32)
+	healthComponent := factories.CreateHealthComponent(10)
 
 	healthComponentName := healthComponent.GetComponentName()
 	speedComponentName := speedComponent.GetComponentName()

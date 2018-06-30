@@ -6,16 +6,21 @@ import (
 	"BasicECS/core"
 )
 
-const testComponentName = "TestComponent"
+const testComponentName = "$TestComponent_"
 
 //test component
 type testComponent struct {
+	Id string
 	val int
 }
 
 func (c testComponent) GetComponentName() string { return getTestComponentName() }
 
 func getTestComponentName() string {return testComponentName }
+
+func (t testComponent) GetComponentId() string { return t.Id }
+
+func (t testComponent) IsUniquePerEntity() bool { return true }
 
 //test system
 type testSystem struct {}

@@ -2,7 +2,11 @@ package components
 
 const hiddenComponentName = "Hidden"
 
-type Hidden struct {}
+type Hidden struct {
+	Id string
+}
+
+func (h Hidden) GetComponentId() string { return h.Id }
 
 func (h Hidden) GetComponentName() string { return GetHiddenComponentName() }
 

@@ -13,9 +13,12 @@ const (
 )
 
 type Damage struct {
+	Id string
 	Type DamageType
 	Damage int
 }
+
+func (d Damage) GetComponentId() string { return d.Id }
 
 func (d Damage) GetComponentName() string { return GetDamageComponentName() }
 

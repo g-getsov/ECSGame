@@ -2,14 +2,17 @@ package components
 
 import "BasicECS/enum"
 
-const equippableComponentName = "Equippable"
+const equipableComponentName = "Equipable"
 
-type Equippable struct {
+type Equipable struct {
+	Id string
 	EquipmentType enum.EquipmentType
 }
 
-func (e Equippable) GetComponentName() string { return GetEquippableComponentName() }
+func (e Equipable) GetComponentId() string { return e.Id }
 
-func (e Equippable) IsUniquePerEntity() bool { return true }
+func (e Equipable) GetComponentName() string { return GetEquipableComponentName() }
 
-func GetEquippableComponentName() string { return equippableComponentName }
+func (e Equipable) IsUniquePerEntity() bool { return true }
+
+func GetEquipableComponentName() string { return equipableComponentName }

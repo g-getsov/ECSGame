@@ -2,7 +2,11 @@ package guis
 
 const characterStatsGuiComponentName = "CharacterStatsGui"
 
-type CharacterStatsGui struct {}
+type CharacterStatsGui struct {
+	Id string
+}
+
+func (c CharacterStatsGui) GetComponentId() string { return c.Id }
 
 func (c CharacterStatsGui) GetComponentName() string { return GetCharacterStatsGuiComponentName() }
 
