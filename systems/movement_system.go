@@ -31,6 +31,10 @@ func (s movementSystem) Update(dt float64, entityManager *core.EntityManager) {
 
 		if speedComponent == nil { continue }
 
+		staminaComponent, _ := entityManager.GetComponentOfClass(
+			components.GetStaminaComponentName(),
+			entityId).(*components.Stamina)
+
 		inputComponent := entityManager.GetComponentOfClass(
 			components.GetInputComponentName(),
 			entityId)
@@ -38,23 +42,41 @@ func (s movementSystem) Update(dt float64, entityManager *core.EntityManager) {
 		if inputComponent == nil {
 			aiMovement(positionComponent, speedComponent)
 		} else {
-			controllerMovement(inputComponent.(*components.Input), positionComponent, speedComponent)
+			controllerMovement(inputComponent.(*components.Input), positionComponent, speedComponent, staminaComponent)
 		}
 	}
 }
 
-func controllerMovement(input *components.Input, position *components.Position, speed *components.Speed) {
+func controllerMovement(input *components.Input, position *components.Position, speed *components.Speed, stamina *components.Stamina) {
+
+	movementSpeed := speed.Speed
+	speedBonus := 0
+
+	if input.SprintKey && stamina != nil && stamina.Stamina > 0 {
+		speedBonus = 5
+	}
+
+	hasMoved := false
+
 	if input.ForwardKey {
-		position.Y -= speed.Speed
+		position.Y -= movementSpeed + speedBonus
+		hasMoved = true
 	}
 	if input.BackwardsKey {
-		position.Y += speed.Speed
+		position.Y += movementSpeed + speedBonus
+		hasMoved = true
 	}
 	if input.LeftKey {
-		position.X -= speed.Speed
+		position.X -= movementSpeed + speedBonus
+		hasMoved = true
 	}
 	if input.RightKey {
-		position.X += speed.Speed
+		position.X += movementSpeed + speedBonus
+		hasMoved = true
+	}
+
+	if hasMoved && input.SprintKey && stamina != nil && stamina.Stamina > 0 {
+		stamina.Stamina -= 1
 	}
 }
 

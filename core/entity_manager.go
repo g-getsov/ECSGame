@@ -1,8 +1,8 @@
 package core
 
 import (
-	"fmt"
 	"BasicECS/utils/uidutils"
+	"fmt"
 )
 
 type EntityManager struct {
@@ -60,11 +60,7 @@ func (e *EntityManager) AddComponentsToEntity(entityId string, components []Comp
 		}
 
 		// if component is unique disassociate all existing components
-		if component.IsUniquePerEntity() {
-			e.componentsByClass[componentName][entityId] = make(map[string]Component)
-		}
-
-		if e.componentsByClass[componentName][entityId] == nil {
+		if component.IsUniquePerEntity() || e.componentsByClass[componentName][entityId] == nil {
 			e.componentsByClass[componentName][entityId] = make(map[string]Component)
 		}
 

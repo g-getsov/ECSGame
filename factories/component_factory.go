@@ -41,6 +41,14 @@ func CreateHealthComponent(health int) cmpt.Health {
 	}
 }
 
+func CreateStaminaComponent(stamina int) cmpt.Stamina {
+	return cmpt.Stamina{
+		Id: uidutils.GenerateNewUniqueId(),
+		Stamina: stamina,
+		MaxStamina: stamina,
+	}
+}
+
 func CreateInputComponent() cmpt.Input {
 	return cmpt.Input{
 		Id: uidutils.GenerateNewUniqueId(),

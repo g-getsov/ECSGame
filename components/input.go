@@ -11,6 +11,7 @@ type Input struct {
 	ShootKey bool
 	InteractKey bool
 	InventoryToggle bool
+	SprintKey bool
 }
 
 func (i Input) GetComponentId() string { return i.Id }

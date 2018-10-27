@@ -101,7 +101,7 @@ func (e *EntityFactory) CreateBullet(entityManager *core.EntityManager, x int, y
 	return entity.Id
 }
 
-func (e *EntityFactory) CreatePlayer(entityManager *core.EntityManager, x int, y int, speed int, health int) string {
+func (e *EntityFactory) CreatePlayer(entityManager *core.EntityManager, x int, y int, speed int, health int, stamina int) string {
 	entity := entityManager.CreateEntity()
 
 	image := e.imageManager.GetImageOrLoad("player.png")
@@ -109,6 +109,7 @@ func (e *EntityFactory) CreatePlayer(entityManager *core.EntityManager, x int, y
 	positionComponent := CreatePositionComponent(x,y)
 	speedComponent := CreateSpeedComponent(speed)
 	healthComponent := CreateHealthComponent(health)
+	staminaComponent := CreateStaminaComponent(stamina)
 	inputComponent := CreateInputComponent()
 	spriteComponent := CreateSpriteComponent(image, nil)
 	movableComponent := CreateMovableComponent()
@@ -120,6 +121,7 @@ func (e *EntityFactory) CreatePlayer(entityManager *core.EntityManager, x int, y
 		&speedComponent,
 		&movableComponent,
 		&healthComponent,
+		&staminaComponent,
 		&inputComponent,
 		&spriteComponent,
 		&hitboxComponent,

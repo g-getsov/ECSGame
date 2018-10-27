@@ -18,9 +18,9 @@ const INVENTORY_WINDOW_HEIGHT = 300
 const INVENTORY_WINDOW_POSITION_X = 350
 const INVENTORY_WINDOW_POSITION_Y = 100
 
-const INVENTORY_MAX_CELLS_IN_ROW = 4
-const INVENTORY_CELL_WIDTH = 64
-const INVENTORY_CELL_HEIGHT = 64
+const INVENTORY_MAX_CELLS_IN_ROW = 8
+const INVENTORY_CELL_WIDTH = 32
+const INVENTORY_CELL_HEIGHT = 32
 
 const HEALTH_BAR_POSITION_X = 30
 const HEALTH_BAR_POSITION_Y = 30
@@ -69,6 +69,17 @@ func (s guiRenderSystem) renderCharacterStatsGui(entityManager *core.EntityManag
 	barWidth := HEALTH_BAR_MAX_WIDTH*percentageHealth
 
 	ebitenutil.DrawRect(s.screen, HEALTH_BAR_POSITION_X, HEALTH_BAR_POSITION_Y, barWidth, HEALTH_BAR_HEIGHT, enum.RED)
+
+	staminaComponent, _ := entityManager.GetComponentOfClass(
+		components.GetStaminaComponentName(),
+		entityId).(*components.Stamina)
+
+	if staminaComponent == nil { return }
+
+	percentageStamina := float64(staminaComponent.Stamina)/float64(staminaComponent.MaxStamina)
+	barWidth = HEALTH_BAR_MAX_WIDTH*percentageStamina
+
+	ebitenutil.DrawRect(s.screen, HEALTH_BAR_POSITION_X, HEALTH_BAR_POSITION_Y+HEALTH_BAR_HEIGHT, barWidth, HEALTH_BAR_HEIGHT, enum.GREEN)
 }
 
 func (s guiRenderSystem) renderInventoryGui(entityManager *core.EntityManager, entityId string) {
@@ -119,6 +130,9 @@ func (s guiRenderSystem) renderInventoryItems(
 	yOffset := y*INVENTORY_CELL_HEIGHT
 
 	op := &ebiten.DrawImageOptions{}
+
+	op.GeoM.Scale(0.5,0.5)//this is a bit sketch
+
 	op.GeoM.Translate(float64(xOffset), float64(yOffset))
 
 	inventoryFrame.DrawImage(spriteComponent.ThumbnailImage, op)

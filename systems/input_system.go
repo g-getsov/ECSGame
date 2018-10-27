@@ -47,6 +47,13 @@ func (s inputSystem) Update(dt float64, entityManager *core.EntityManager) {
 			inputComponent.RightKey = false
 		}
 
+		if inp.IsKeyJustPressed(ebiten.KeyShift) {
+			inputComponent.SprintKey = true
+		}
+		if inp.IsKeyJustReleased(ebiten.KeyShift) {
+			inputComponent.SprintKey = false
+		}
+
 		if inp.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) || inp.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 			inputComponent.ShootKey = true
 		}

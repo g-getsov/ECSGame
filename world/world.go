@@ -29,7 +29,8 @@ func (w *World) initializeWorld(screen *ebiten.Image) {
 		550,
 		240,
 		2,
-		100)
+		100,
+		400)
 
 	w.entityFactory.CreateZombie(w.entityManager)
 
